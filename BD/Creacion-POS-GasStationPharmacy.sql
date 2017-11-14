@@ -17,7 +17,7 @@ CREATE TABLE SUCURSAL(
 );
 
 CREATE TABLE CAJA(
-	Id int NOT NULL,
+	Id INT NOT NULL,
     Activo boolean NOT NULL,
     Sucursal varchar(50) NOT NULL,
     PRIMARY KEY (Id)
@@ -95,7 +95,7 @@ CREATE TABLE MEDICAMENTO(
 );
 
 CREATE TABLE FACTURA(
-	Id int NOT NULL,
+	Id serial NOT NULL,
     Fecha date NOT NULL,
     Hora time NOT NULL,
     Total int NOT NULL,
