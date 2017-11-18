@@ -99,6 +99,7 @@ CREATE TABLE FACTURA(
     Fecha date NOT NULL,
     Hora time NOT NULL,
     Total int NOT NULL,
+    Tipo char(1) NOT NULL,
     Activo boolean NOT NULL,
     Caja int NOT NULL,
     Empleado int NOT NULL,

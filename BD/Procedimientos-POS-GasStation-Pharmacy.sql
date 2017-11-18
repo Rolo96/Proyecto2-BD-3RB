@@ -1,10 +1,30 @@
 CREATE OR REPLACE FUNCTION insert_proveedor(newNombre VARCHAR(50), newSede VARCHAR(50)) 
     RETURNS void AS $$
-    BEGIN
+    BEGIN 
     	IF EXISTS (SELECT * FROM PROVEEDOR WHERE Nombre = newNombre AND NOT Activo) THEN
         	UPDATE PROVEEDOR SET Activo=true, Sede=newSede where Nombre=newNombre;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE PROVEEDOR SET Activo=true,Sede='||''''||newSede||''''||'
+                    WHERE Nombre='||''''||newNombre||''''||';');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+  				BEGIN 
+   					RAISE NOTICE 'No hay conexion con la otra base de datos';
+ 				END;   
+            END;
         ELSE
       		INSERT INTO PROVEEDOR(Nombre,Sede,Activo) VALUES (newNombre,newSede,true);
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('INSERT INTO PROVEEDOR(Nombre,Sede,Activo) 
+                    VALUES('||''''||newNombre||''''||','||''''||newSede||''''||',true);');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
     END;
     $$ LANGUAGE plpgsql;
@@ -16,6 +36,16 @@ CREATE OR REPLACE FUNCTION update_proveedor(newNombre VARCHAR(50), newSede VARCH
     BEGIN
     	IF EXISTS (SELECT * FROM PROVEEDOR WHERE Nombre = newNombre AND Activo) THEN
         	UPDATE PROVEEDOR SET Sede=newSede where Nombre=newNombre;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE PROVEEDOR SET Sede='||''''||newSede||''''||'
+                    WHERE Nombre='||''''||newNombre||''''||';');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+  				BEGIN 
+   					RAISE NOTICE 'No hay conexion con la otra base de datos';
+ 				END;
+            END;
         ELSE
       		RAISE EXCEPTION 'Proveedor no registrado';
         END IF;
@@ -30,6 +60,16 @@ CREATE OR REPLACE FUNCTION delete_proveedor(nombreProveedor VARCHAR(50))
     	IF EXISTS (SELECT * FROM PROVEEDOR WHERE Nombre = nombreProveedor AND Activo) THEN
         	IF NOT EXISTS (SELECT * FROM MEDICAMENTO WHERE Proveedor = nombreProveedor AND Activo) THEN
         		UPDATE PROVEEDOR SET Activo=false where Nombre=nombreProveedor;
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('UPDATE PROVEEDOR SET Activo=false
+                    WHERE Nombre='||''''||nombreProveedor||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+  					BEGIN 
+   						RAISE NOTICE 'No hay conexion con la otra base de datos';
+ 					END;
+                END;
         	ELSE
         		RAISE EXCEPTION 'No se puede eliminar este proveedor, algunos medicamentos están ligadas a él';
         	END IF;
@@ -47,13 +87,33 @@ CREATE OR REPLACE FUNCTION insert_medicamento(newNombre VARCHAR(50), newPrecio I
     	IF EXISTS (SELECT * FROM MEDICAMENTO WHERE Nombre = newNombre AND NOT Activo) THEN
         	IF EXISTS (SELECT * FROM PROVEEDOR WHERE Nombre = newProveedor AND Activo) THEN
         		UPDATE MEDICAMENTO SET Activo=true, Precio=newPrecio,Prescripcion=newPrescripcion,Proveedor=newProveedor where Nombre=newNombre;
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('UPDATE MEDICAMENTO SET Activo=true,Precio='||''''||newPrecio||''''||',Prescripcion='||''''||newPrescripcion||''''||',Proveedor='||''''||newProveedor||''''||'
+                    WHERE Nombre='||''''||newNombre||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             ELSE
             	RAISE EXCEPTION 'Proveedor no registrado';
             END IF;
         ELSE
         	IF EXISTS (SELECT * FROM PROVEEDOR WHERE Nombre = newProveedor AND Activo) THEN
             	INSERT INTO MEDICAMENTO(Nombre,Precio,Prescripcion,Proveedor,Activo) VALUES (newNombre,newPrecio,newPrescripcion,newProveedor,true);
-        	ELSE
+        		BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('INSERT INTO MEDICAMENTO(Nombre,Precio,Prescripcion,Proveedor,Activo)
+                    VALUES('||''''||newNombre||''''||','||''''||newPrecio||''''||','||''''||newPrescripcion||''''||','||''''||newProveedor||''''||',true);');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+  					BEGIN 
+   						RAISE NOTICE 'No hay conexion con la otra base de datos';
+ 					END;
+                END;
+            ELSE
             	RAISE EXCEPTION 'Proveedor no registrado';
             END IF;
         END IF;
@@ -68,6 +128,16 @@ CREATE OR REPLACE FUNCTION update_medicamento(newNombre VARCHAR(50), newPrecio I
             IF EXISTS (SELECT * FROM MEDICAMENTO WHERE Nombre = newNombre AND Activo) THEN
                 IF EXISTS (SELECT * FROM PROVEEDOR WHERE Nombre = newProveedor AND Activo) THEN
                     UPDATE MEDICAMENTO SET Activo=true, Precio=newPrecio,Prescripcion=newPrescripcion,Proveedor=newProveedor where Nombre=newNombre;
+                	BEGIN
+                    	perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                        perform dblink_exec('UPDATE MEDICAMENTO SET Activo=true,Precio='||''''||newPrecio||''''||',Prescripcion='||''''||newPrescripcion||''''||',Proveedor='||''''||newProveedor||''''||'
+                        WHERE Nombre='||''''||newNombre||''''||';');
+                        perform dblink_disconnect();
+                        EXCEPTION WHEN OTHERS THEN 
+  						BEGIN 
+   							RAISE NOTICE 'No hay conexion con la otra base de datos';
+ 						END;
+                    END;
                 ELSE
                     RAISE EXCEPTION 'Proveedor no registrado';
                 END IF;
@@ -85,7 +155,17 @@ CREATE OR REPLACE FUNCTION delete_medicamento(nombreMedicamento VARCHAR(50))
     	IF EXISTS (SELECT * FROM MEDICAMENTO WHERE Nombre = nombreMedicamento AND Activo) THEN
         	IF NOT EXISTS (SELECT * FROM MEDICAMENTOXSUCURSAL WHERE Medicamento = nombreMedicamento AND Activo) THEN
         		UPDATE Medicamento SET Activo=false where Nombre=nombreMedicamento;
-        	ELSE
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('UPDATE MEDICAMENTO SET Activo=false
+                    WHERE Nombre='||''''||nombreMedicamento||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
+            ELSE
         		RAISE EXCEPTION 'No se puede eliminar este medicamento, algunas sucursales están ligadas a él';
         	END IF;
     	ELSE
@@ -100,29 +180,74 @@ CREATE OR REPLACE FUNCTION insert_sucursal(newNombre VARCHAR(50), newProvincia V
     RETURNS void AS $$
     BEGIN 
     	IF EXISTS (SELECT * FROM SUCURSAL WHERE Nombre = newNombre AND NOT Activo) THEN
-        	UPDATE SUCURSAL SET Provincia=newProvincia, Ciudad = newCiudad, Senas = newSenas, Descripcion = newDescripcion, Compania = newCompania, Activo=true where Nombre=newNombre;
-    	ELSE
+        	UPDATE SUCURSAL SET Provincia=newProvincia, Ciudad = newCiudad, Senas = newSenas, Descripcion = newDescripcion,
+            					Compania = newCompania, Activo=true where Nombre=newNombre;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE SUCURSAL SET Activo=true, Provincia='||''''||newProvincia||''''||',Ciudad='||''''||newCiudad||''''||',
+                                    Senas='||''''||newSenas||''''||',Descripcion='||''''||newDescripcion||''''||',
+                                    Compania='||''''||newCompania||''''||'
+                                    WHERE Nombre='||''''||newNombre||''''||';');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
+        ELSE
         	INSERT INTO SUCURSAL(Nombre,Provincia,Ciudad,Senas,Descripcion,Compania,Activo) VALUES (newNombre,newProvincia,newCiudad,newSenas,newDescripcion,newCompania,true);
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('INSERT INTO SUCURSAL(Nombre, Provincia, Ciudad, Senas,Descripcion, Compania, Activo) 
+                                    VALUES('||''''||newNombre||''''||','||''''||newProvincia||''''||','||''''||newCiudad||''''||',
+                                    '||''''||newSenas||''''||','||''''||newDescripcion||''''||',
+                                    '||''''||newCompania||''''||',true);');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
-        IF EXISTS (SELECT * FROM ADMINISTRADORXSUCURSAL WHERE Sucursal = newNombre AND Administrador = newAdministrador AND NOT Activo) THEN
-        BEGIN
+       	IF EXISTS (SELECT * FROM ADMINISTRADORXSUCURSAL WHERE Sucursal = newNombre AND Administrador = newAdministrador AND NOT Activo) THEN
+       	BEGIN
        		IF EXISTS (SELECT * FROM EMPLEADO WHERE Cedula = newAdministrador AND Activo) THEN
             	UPDATE ADMINISTRADORXSUCURSAL SET Activo = true WHERE Sucursal = newNombre AND Administrador = newAdministrador;
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('UPDATE ADMINISTRADORXSUCURSAL SET Activo=true 
+                                        WHERE Sucursal='||''''||newNombre||''''||' AND Administrador='||''''||newAdministrador||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             ELSE
             	RAISE EXCEPTION 'Empleado no registrado';
                 ROLLBACK;
             END IF;
-        END;
-        ELSE
-        BEGIN
+       	END;
+       	ELSE
+       	BEGIN
         	IF EXISTS (SELECT * FROM EMPLEADO WHERE Cedula = newAdministrador AND Activo) THEN
             	INSERT INTO ADMINISTRADORXSUCURSAL(Sucursal,Administrador,Activo) VALUES (newNombre,newAdministrador,true);
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('INSERT INTO ADMINISTRADORXSUCURSAL(Administrador,Sucursal,Activo)
+                                        VALUES('||''''||newAdministrador||''''||','||''''||newNombre||''''||',true);');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             ELSE
             	RAISE EXCEPTION 'Empleado no registrado';
                 ROLLBACK;
-            END IF;
-         END;
-         END IF;
+        	END IF;
+        END;
+        END IF;
     END;
     $$ LANGUAGE plpgsql;
 
@@ -133,6 +258,18 @@ CREATE OR REPLACE FUNCTION update_sucursal(newNombre VARCHAR(50), newProvincia V
     BEGIN 
     	IF EXISTS (SELECT * FROM SUCURSAL WHERE Nombre = newNombre AND Activo) THEN
         	UPDATE SUCURSAL SET Provincia=newProvincia, Ciudad = newCiudad, Senas = newSenas, Descripcion = newDescripcion, Compania = newCompania, Activo=true where Nombre=newNombre;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE SUCURSAL SET Provincia='||''''||newProvincia||''''||',Ciudad='||''''||newCiudad||''''||',
+                                    Senas='||''''||newSenas||''''||',Descripcion='||''''||newDescripcion||''''||',
+                                    Compania='||''''||newCompania||''''||'
+                                    WHERE Nombre='||''''||newNombre||''''||';');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         ELSE
         	RAISE EXCEPTION 'Sucursal no registrada';
         END IF;
@@ -152,6 +289,16 @@ CREATE OR REPLACE FUNCTION delete_sucursal(newNombre VARCHAR(50))
             ELSE 
         		UPDATE SUCURSAL SET Activo=false WHERE Nombre=newNombre;
                 UPDATE ADMINISTRADORXSUCURSAL SET Activo = false WHERE Sucursal = newNombre;
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('UPDATE SUCURSAL SET Activo=false WHERE Nombre='||''''||newNombre||''''||';');
+                    perform dblink_exec('UPDATE ADMINISTRADORXSUCURSAL SET Activo=false WHERE Sucursal='||''''||newNombre||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             END IF;
         ELSE
         	RAISE EXCEPTION 'Sucursal no registrada';
@@ -175,6 +322,20 @@ CREATE OR REPLACE FUNCTION insert_empleado(newCedula INT,newNombre1 VARCHAR(20),
         		UPDATE EMPLEADO SET Activo=true, Nombre1=newNombre1,Nombre2=newNombre2,Apellido1=newApellido1,Apellido2=newApellido2,
             	Provincia=newProvincia,Ciudad=newCiudad,Senas=newSenas,FechaNacimiento=newFechaNacimiento,
             	Contrasena=md5(newContrasena),Sucursal=newSucursal,Rol=newRol WHERE Cedula=newCedula;
+                BEGIN
+                	perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('UPDATE EMPLEADO SET Activo=true,Nombre1='||''''||newNombre1||''''||',Nombre2='||''''||newNombre2||''''||',
+                                        Apellido1='||''''||newApellido1||''''||',Apellido2='||''''||newApellido2||''''||',
+                                        Provincia='||''''||newProvincia||''''||',Ciudad='||''''||newCiudad||''''||',
+                                    Senas='||''''||newSenas||''''||',FechaNacimiento='||''''||newFechaNacimiento||''''||',
+                                    Contrasena=md5('||''''||newContrasena||''''||'),Sucursal='||''''||newSucursal||''''||',Rol='||''''||newRol||''''||'
+                                    WHERE Cedula='||''''||newCedula||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             END IF;
         ELSE
         	IF NOT EXISTS(SELECT * FROM SUCURSAL WHERE Nombre = newSucursal AND Activo) THEN
@@ -186,6 +347,21 @@ CREATE OR REPLACE FUNCTION insert_empleado(newCedula INT,newNombre1 VARCHAR(20),
             	Contrasena,Sucursal,Rol,Activo) VALUES (newCedula,newNombre1,newNombre2,newApellido1,newApellido2,
             	newProvincia,newCiudad,newSenas,newFechaNacimiento,
             	md5(newContrasena),newSucursal,newRol,true);
+                BEGIN
+                	perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('INSERT INTO EMPLEADO(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,
+                                        Ciudad,Senas,FechaNacimiento,Contrasena,Sucursal,Rol,Activo) 
+                                        VALUES('||''''||newCedula||''''||','||''''||newNombre1||''''||','||''''||newNombre2||''''||',
+                                        '||''''||newApellido1||''''||','||''''||newApellido2||''''||',
+                                        '||''''||newProvincia||''''||','||''''||newCiudad||''''||',
+                                        '||''''||newSenas||''''||','||''''||newFechaNacimiento||''''||',
+                                        md5('||''''||newContrasena||''''||'),'||''''||newSucursal||''''||','||''''||newRol||''''||',true);');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             END IF;
         END IF;
     END;
@@ -207,6 +383,20 @@ CREATE OR REPLACE FUNCTION update_empleado(newCedula INT,newNombre1 VARCHAR(20),
         		UPDATE EMPLEADO SET Nombre1=newNombre1,Nombre2=newNombre2,Apellido1=newApellido1,Apellido2=newApellido2,
             	Provincia=newProvincia,Ciudad=newCiudad,Senas=newSenas,FechaNacimiento=newFechaNacimiento,
             	Contrasena=newContrasena,Sucursal=newSucursal,Rol=newRol WHERE Cedula=newCedula;
+                BEGIN
+                	perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('UPDATE EMPLEADO SET Nombre1='||''''||newNombre1||''''||',Nombre2='||''''||newNombre2||''''||',
+                                        Apellido1='||''''||newApellido1||''''||',Apellido2='||''''||newApellido2||''''||',
+                                        Provincia='||''''||newProvincia||''''||',Ciudad='||''''||newCiudad||''''||',
+                                    Senas='||''''||newSenas||''''||',FechaNacimiento='||''''||newFechaNacimiento||''''||',
+                                    Contrasena=md5('||''''||newContrasena||''''||'),Sucursal='||''''||newSucursal||''''||',Rol='||''''||newRol||''''||'
+                                    WHERE Cedula='||''''||newCedula||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             END IF;
         ELSE
         	RAISE EXCEPTION 'Empleado no registrado';
@@ -221,6 +411,16 @@ CREATE OR REPLACE FUNCTION delete_empleado(newCedula INT)
     BEGIN 
     	IF EXISTS (SELECT * FROM EMPLEADO WHERE Cedula = newCedula AND Activo) THEN
         	UPDATE EMPLEADO SET Activo=false WHERE Cedula=newCedula;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+            	perform dblink_exec('UPDATE EMPLEADO SET Activo=false
+            					WHERE Cedula='||''''||newCedula||''''||';');
+            	perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                	RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         ELSE
         	RAISE EXCEPTION 'Empleado no registrado';
         END IF;
@@ -235,36 +435,111 @@ CREATE OR REPLACE FUNCTION insert_cliente(newCedula INT,newNombre1 VARCHAR(20),n
     newTelefono INTEGER ARRAY,newPadecimiento JSON) 
     RETURNS void AS $$
     DECLARE 
+    pade VARCHAR(50);
+    an INT;
     telefonoCliente INTEGER;
     padecimientoCliente JSON;
     BEGIN 
     	IF EXISTS (SELECT * FROM CLIENTE WHERE Cedula = newCedula AND NOT Activo) THEN
-        	UPDATE EMPLEADO SET Activo=true, Nombre1=newNombre1,Nombre2=newNombre2,Apellido1=newApellido1,Apellido2=newApellido2,
+        	UPDATE CLIENTE SET Activo=true, Nombre1=newNombre1,Nombre2=newNombre2,Apellido1=newApellido1,Apellido2=newApellido2,
             Provincia=newProvincia,Ciudad=newCiudad,Senas=newSenas,FechaNacimiento=newFechaNacimiento,
             Contrasena=md5(newContrasena),Prioridad=newPrioridad WHERE Cedula=newCedula;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE CLIENTE SET Activo=true,Nombre1='||''''||newNombre1||''''||',Nombre2='||''''||newNombre2||''''||',
+                                        Apellido1='||''''||newApellido1||''''||',Apellido2='||''''||newApellido2||''''||',
+                                        Provincia='||''''||newProvincia||''''||',Ciudad='||''''||newCiudad||''''||',
+                                    Senas='||''''||newSenas||''''||',FechaNacimiento='||''''||newFechaNacimiento||''''||',
+                                    Contrasena=md5('||''''||newContrasena||''''||'),Prioridad='||''''||newPrioridad||''''||'
+                                    WHERE Cedula='||''''||newCedula||''''||';');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         ELSE
         	INSERT INTO CLIENTE(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,Ciudad,Senas,FechaNacimiento,
             Contrasena,Prioridad,Activo) VALUES (newCedula,newNombre1,newNombre2,newApellido1,newApellido2,
             newProvincia,newCiudad,newSenas,newFechaNacimiento,
             md5(newContrasena),newPrioridad,true);
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('INSERT INTO CLIENTE(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,
+                                        Ciudad,Senas,FechaNacimiento,Contrasena,Prioridad,Activo) 
+                                        VALUES('||''''||newCedula||''''||','||''''||newNombre1||''''||','||''''||newNombre2||''''||',
+                                        '||''''||newApellido1||''''||','||''''||newApellido2||''''||',
+                                        '||''''||newProvincia||''''||','||''''||newCiudad||''''||',
+                                        '||''''||newSenas||''''||','||''''||newFechaNacimiento||''''||',
+                                        md5('||''''||newContrasena||''''||'),'||''''||newPrioridad||''''||',true);');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
         FOREACH telefonoCliente IN ARRAY newTelefono
         LOOP
         	IF EXISTS(SELECT * FROM TELEFONOXCLIENTE WHERE Cliente = newCedula AND Telefono=telefonoCliente AND NOT Activo) THEN
             	UPDATE TELEFONOXCLIENTE SET Activo=true WHERE Cliente = newCedula AND Telefono=telefonoCliente;
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('UPDATE TELEFONOXCLIENTE SET Activo=true 
+                                    WHERE Cliente='||''''||newCedula||''''||' AND Telefono='||''''||telefonoCliente||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             ELSE
             	INSERT INTO TELEFONOXCLIENTE(Cliente,Telefono,Activo) VALUES (newCedula,telefonoCliente,true);
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('INSERT INTO TELEFONOXCLIENTE(Cliente,Telefono,Activo) 
+                                    VALUES ('||''''||newCedula||''''||','||''''||telefonoCliente||''''||',true);');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
         	END IF;
         END LOOP;
        	FOR padecimientoCliente IN SELECT * FROM json_array_elements(newPadecimiento)
         LOOP
+        	pade=padecimientoCliente->>'Padecimiento';
+            an=(padecimientoCliente->>'Ano')::INT;
         	IF EXISTS(SELECT * FROM PADECIMIENTO WHERE Cliente = newCedula AND Padecimiento=padecimientoCliente->>'Padecimiento' 
                       AND Ano = (padecimientoCliente->>'Ano')::INT AND NOT Activo) THEN
             	UPDATE PADECIMIENTO SET Activo=true WHERE Cliente = newCedula AND Padecimiento=padecimientoCliente->>'Padecimiento' 
                       AND Ano = (padecimientoCliente->>'Ano')::INT;
+                BEGIN
+                    perform dblink_connect('dbname=POS-GasStationPharmacyCopy user=postgres     password=weber071196');
+                    perform dblink_exec('UPDATE PADECIMIENTO SET Activo=true 
+                                    WHERE Cliente='||''''||newCedula||''''||' AND Padecimiento='||''''||pade||''''||'
+                                        AND Ano='||''''||an||''''||';');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
             ELSE
             	INSERT INTO PADECIMIENTO(Cliente,Padecimiento,Ano,Activo) VALUES (newCedula,padecimientoCliente->>'Padecimiento',(padecimientoCliente->>'Ano')::INT,true);
-        	END IF;
+                BEGIN
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('INSERT INTO PADECIMIENTO(Cliente,Padecimiento,Ano,Activo)
+                                        VALUES('||''''||newCedula||''''||','||''''||pade||''''||',
+                                        '||''''||an||''''||',true);');                              
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
+            END IF;
         END LOOP;
     END;
     $$ LANGUAGE plpgsql;
@@ -273,35 +548,27 @@ CREATE OR REPLACE FUNCTION insert_cliente(newCedula INT,newNombre1 VARCHAR(20),n
 
 CREATE OR REPLACE FUNCTION update_cliente(newCedula INT,newNombre1 VARCHAR(20),newNombre2 VARCHAR(20),
     newApellido1 VARCHAR(20),newApellido2 VARCHAR(20),newProvincia VARCHAR(20),newCiudad VARCHAR(20),
-    newSenas VARCHAR(50),newFechaNacimiento DATE,newContrasena VARCHAR(200),newPrioridad INT,
-    newTelefono INTEGER ARRAY,newPadecimiento JSON) 
+    newSenas VARCHAR(50),newFechaNacimiento DATE,newContrasena VARCHAR(200),newPrioridad INT) 
     RETURNS void AS $$
-    DECLARE 
-    telefonoCliente INTEGER;
-    padecimientoCliente JSON;
     BEGIN 
     	IF EXISTS (SELECT * FROM CLIENTE WHERE Cedula = newCedula AND Activo) THEN
-        	UPDATE EMPLEADO SET Nombre1=newNombre1,Nombre2=newNombre2,Apellido1=newApellido1,Apellido2=newApellido2,
+        	UPDATE CLIENTE SET Nombre1=newNombre1,Nombre2=newNombre2,Apellido1=newApellido1,Apellido2=newApellido2,
             Provincia=newProvincia,Ciudad=newCiudad,Senas=newSenas,FechaNacimiento=newFechaNacimiento,
             Contrasena=md5(newContrasena),Prioridad=newPrioridad WHERE Cedula=newCedula;
-            FOREACH telefonoCliente IN ARRAY newTelefono
-        	LOOP
-        		IF EXISTS(SELECT * FROM TELEFONOXCLIENTE WHERE Cliente = newCedula AND Telefono=telefonoCliente AND NOT Activo) THEN
-            		UPDATE TELEFONOXCLIENTE SET Activo=true WHERE Cliente = newCedula AND Telefono=telefonoCliente;
-            	ELSE
-            		INSERT INTO TELEFONOXCLIENTE(Cliente,Telefono,Activo) VALUES (newCedula,telefonoCliente,true);
-        		END IF;
-        	END LOOP;
-       		FOR padecimientoCliente IN SELECT * FROM json_array_elements(newPadecimiento)
-        	LOOP
-        		IF EXISTS(SELECT * FROM PADECIMIENTO WHERE Cliente = newCedula AND Padecimiento=padecimientoCliente->>'Padecimiento' 
-                      AND Ano = (padecimientoCliente->>'Ano')::INT AND NOT Activo) THEN
-            	UPDATE PADECIMIENTO SET Activo=true WHERE Cliente = newCedula AND Padecimiento=padecimientoCliente->>'Padecimiento' 
-                      AND Ano = (padecimientoCliente->>'Ano')::INT;
-            	ELSE
-            		INSERT INTO PADECIMIENTO(Cliente,Padecimiento,Ano,Activo) VALUES (newCedula,padecimientoCliente->>'Padecimiento',(padecimientoCliente->>'Ano')::INT,true);
-        		END IF;
-        	END LOOP;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE CLIENTE SET Activo=true,Nombre1='||''''||newNombre1||''''||',Nombre2='||''''||newNombre2||''''||',
+                                        Apellido1='||''''||newApellido1||''''||',Apellido2='||''''||newApellido2||''''||',
+                                        Provincia='||''''||newProvincia||''''||',Ciudad='||''''||newCiudad||''''||',
+                                    Senas='||''''||newSenas||''''||',FechaNacimiento='||''''||newFechaNacimiento||''''||',
+                                    Contrasena=md5('||''''||newContrasena||''''||'),Prioridad='||''''||newPrioridad||''''||'
+                                    WHERE Cedula='||''''||newCedula||''''||';');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         ELSE
         	RAISE EXCEPTION 'Cliente no registrado';
         END IF;
@@ -314,9 +581,20 @@ CREATE OR REPLACE FUNCTION delete_cliente(newCedula INT)
     RETURNS void AS $$
     BEGIN 
     	IF EXISTS (SELECT * FROM CLIENTE WHERE Cedula = newCedula AND Activo) THEN
-        	UPDATE EMPLEADO SET Activo=false WHERE Cedula=newCedula;
+        	UPDATE CLIENTE SET Activo=false WHERE Cedula=newCedula;
             UPDATE TELEFONOXCLIENTE SET Activo = false WHERE Cliente=newCedula;
             UPDATE PADECIMIENTO SET Activo = false WHERE Cliente= newCedula;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE CLIENTE SET Activo=false WHERE Cedula='||''''||newCedula||''''||';');
+                perform dblink_exec('UPDATE TELEFONOXCLIENTE SET Activo=false WHERE Cliente='||''''||newCedula||''''||';');
+                perform dblink_exec('UPDATE PADECIMIENTO SET Activo=false WHERE Cliente='||''''||newCedula||''''||';');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         ELSE
         	RAISE EXCEPTION 'Cliente no registrado';
         END IF;
@@ -325,10 +603,12 @@ CREATE OR REPLACE FUNCTION delete_cliente(newCedula INT)
 
 ---------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION insert_factura(newFecha DATE,newHora TIME,newTotal INT,newCaja INT,
+CREATE OR REPLACE FUNCTION insert_factura(newFecha DATE,newHora TIME,newTotal INT,newTipo CHAR(1),newCaja INT,
                                           newEmpleado INT,newCliente INT,newMedicamento JSON) 
     RETURNS void AS $$
     DECLARE 
+    medica VARCHAR(50);
+    cant INT;
     medicamentoCompra JSON;
     newId BIGINT;
     BEGIN 
@@ -339,9 +619,20 @@ CREATE OR REPLACE FUNCTION insert_factura(newFecha DATE,newHora TIME,newTotal IN
         ELSIF NOT EXISTS (SELECT * FROM CLIENTE WHERE Cedula = newCliente AND Activo) THEN
             RAISE EXCEPTION 'Cliente no registrado';
         ELSE
-            INSERT INTO FACTURA(Fecha,Hora,Total,Caja,Empleado,Cliente,Activo) VALUES
-            (newFecha,newHora,newTotal,newCaja,newEmpleado,newCliente,true);
+            INSERT INTO FACTURA(Fecha,Hora,Total,Tipo,Caja,Empleado,Cliente,Activo) VALUES
+            (newFecha,newHora,newTotal,newTipo,newCaja,newEmpleado,newCliente,true);
             newId = currval(pg_get_serial_sequence('FACTURA', 'id'));
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('INSERT INTO FACTURA(Id,Fecha,Hora,Total,Tipo,Caja,Empleado,Cliente,Activo)
+                                        VALUES('||''''||newId||''''||','||''''||newFecha||''''||','||''''||newHora||''''||','||''''||newTotal||''''||',
+                                        '||''''||newTipo||''''||','||''''||newCaja::INT||''''||','||''''||newEmpleado||''''||','||''''||newCliente||''''||',true);');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
         FOR medicamentoCompra IN SELECT * FROM json_array_elements(newMedicamento)
         LOOP
@@ -351,6 +642,22 @@ CREATE OR REPLACE FUNCTION insert_factura(newFecha DATE,newHora TIME,newTotal IN
             		INSERT INTO MEDICAMENTOXFACTURA(Medicamento,Factura,Cantidad,Activo) VALUES (medicamentoCompra->>'Medicamento',newId,(medicamentoCompra->>'Cantidad')::INT,true);
                 	UPDATE MEDICAMENTOXSUCURSAL SET Cantidad=Cantidad-(medicamentoCompra->>'Cantidad')::INT WHERE Sucursal=(SELECT Sucursal FROM CAJA WHERE Id=newCaja) AND
                     Medicamento=medicamentoCompra->>'Medicamento';
+                    BEGIN
+                    	newId = currval(pg_get_serial_sequence('FACTURA','id'))::INT;
+                    	medica=medicamentoCompra->>'Medicamento';
+                    	cant=(medicamentoCompra->>'Cantidad')::INT;
+                        perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                        perform dblink_exec('INSERT INTO MEDICAMENTOXFACTURA(Medicamento,Factura,Cantidad,Activo)
+                                        VALUES('||''''||medica||''''||','||''''||newId||''''||','||''''||cant||''''||',true);');
+                        perform dblink_exec('UPDATE MEDICAMENTOXSUCURSAL SET Cantidad=Cantidad-'||''''||cant::INT||''''||'
+                                    		WHERE Sucursal=(SELECT Sucursal FROM CAJA WHERE Id='||''''||newCaja||''''||') AND
+                                      		Medicamento='||''''||medica||''''||';');
+                        perform dblink_disconnect();
+                        EXCEPTION WHEN OTHERS THEN 
+                        BEGIN 
+                            RAISE NOTICE 'No hay conexion con la otra base de datos';
+                        END;
+                    END;
                 ELSE
                 	RAISE EXCEPTION 'No hay medicamento';
                 END IF;
@@ -371,9 +678,20 @@ CREATE OR REPLACE FUNCTION insert_medicamentoxsucursal(newSucursal VARCHAR(50),n
             RAISE EXCEPTION 'Sucursal no registrada';
         ELSIF NOT EXISTS (SELECT * FROM MEDICAMENTO WHERE Nombre = newMedicamento AND Activo) THEN
             RAISE EXCEPTION 'Medicamento no registrado';
-        ELSE
+       	ELSE 
             INSERT INTO MEDICAMENTOXSUCURSAL(Sucursal,Medicamento,Cantidad,StockMinimo,StockPromedio,Activo) VALUES
             (newSucursal,newMedicamento,newCantidad,newStockMinimo,newStockPromedio,true);
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('INSERT INTO MEDICAMENTOXSUCURSAL(Sucursal,Medicamento,Cantidad,StockMinimo,StockPromedio,Activo)
+                                        VALUES('||''''||newSucursal||''''||','||''''||newMedicamento||''''||','||''''||newCantidad||''''||',
+                                            '||''''||newStockMinimo||''''||','||''''||newStockPromedio||''''||',true);');     
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
     END;
     $$ LANGUAGE plpgsql;
@@ -391,6 +709,16 @@ CREATE OR REPLACE FUNCTION update_medicamentoxsucursal(newSucursal VARCHAR(50),n
             RAISE EXCEPTION 'Medicamento no registrado en la sucursal';
         ELSE
             UPDATE MEDICAMENTOXSUCURSAL SET Cantidad=Cantidad+newCantidad WHERE Sucursal=newSucursal AND Medicamento=newMedicamento;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE MEDICAMENTOXSUCURSAL SET Cantidad=Cantidad+'||''''||newCantidad::INT||''''||'
+                                        WHERE Sucursal='||''''||newSucursal||''''||' AND Medicamento='||''''||newMedicamento||''''||';');             
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
     END;
     $$ LANGUAGE plpgsql;
@@ -410,6 +738,17 @@ CREATE OR REPLACE FUNCTION insert_empleadoxcaja(newEmpleado INT,newCaja INT,newF
             FechaFinal,HoraFinal,EfectivoInicial,EfectivoFinal,Activo) VALUES
             (newEmpleado,newCaja,newFechaInicio,newHoraInicio,
             newFechaFinal,newHoraFinal,newEfectivoInicial,newEfectivoFinal,true);
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('INSERT INTO EMPLEADOXCAJA(Empleado,Caja,FechaInicio,HoraInicio,FechaFinal,HoraFinal,EfectivoInicial,EfectivoFinal,Activo)
+                                        VALUES('||''''||newEmpleado||''''||','||''''||newCaja||''''||','||''''||newFechaInicio||''''||','||''''||newHoraInicio||''''||',
+                                   '||''''||newFechaFinal||''''||','||''''||newHoraFinal||''''||','||''''||newEfectivoInicial||''''||','||''''||newEfectivoFinal||''''||',true);');            
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
     END;
     $$ LANGUAGE plpgsql;
@@ -425,8 +764,26 @@ CREATE OR REPLACE FUNCTION insert_caja(newCaja INT,newSucursal VARCHAR(50))
             RAISE EXCEPTION 'Caja ya registrada';
          ELSIF EXISTS (SELECT * FROM CAJA WHERE Id = newCaja AND NOT Activo) THEN
             UPDATE CAJA SET Activo=true,Sucursal=newSucursal WHERE Id = newCaja;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE CAJA SET Activo=true,Sucursal='||''''||newSucursal||''''||' WHERE Id = '||''''||newCaja||''''||';');            
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         ELSE
             INSERT INTO CAJA(Id,Sucursal,Activo) VALUES (newCaja,newSucursal,true);
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('INSERT INTO CAJA(Id,Sucursal,Activo) VALUES ('||''''||newCaja||''''||','||''''||newSucursal||''''||',true);');            
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
     END;
     $$ LANGUAGE plpgsql;
@@ -440,6 +797,15 @@ CREATE OR REPLACE FUNCTION delete_caja(newCaja INT)
             RAISE EXCEPTION 'Caja no registrada';
         ELSE
             UPDATE CAJA SET Activo=false WHERE Id=newCaja;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE CAJA SET Activo=false WHERE Id = '||''''||newCaja||''''||';');            
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
         END IF;
     END;
     $$ LANGUAGE plpgsql;
