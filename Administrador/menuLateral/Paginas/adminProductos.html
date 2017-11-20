@@ -1,0 +1,206 @@
+﻿<!--Se adhieren los diseños de las css-->
+<link href="../Estilos/Tablas.css" rel="stylesheet" />
+<link href="../Estilos/modals.css" rel="stylesheet" />
+
+<!--Se incluye el menu lateral de la vista administrador-->
+<ng-include src="urlAdmin"></ng-include>
+<div id="page-wrapper">
+    <div id="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <!--Encabezado de la pagina-->
+                <h1> Administración de productos</h1>
+                <!--Boton para crear productos-->
+                <div class="row">
+                    <div class="container" align="center" style="width:830px; margin-bottom:-35px; margin-top:50px">
+                        <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-backdrop="false" data-target="#modalCreacion"> Agregar</button>
+                    </div>
+                </div>
+                <!--Tabla en la que se muestran todos los productos-->
+                <table>
+                    <thead>
+                        <tr><th colspan="5">Lista de productos</th></tr>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>Prescripcion</th>
+                            <th colspan="2">Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="producto in productos">
+                            <td>{{producto.nombre}}</td>
+                            <td>{{producto.cantidad}}</td>
+                            <td>{{producto.prescripcion}}</td>
+                            <td>¢{{producto.precio}}</td>
+                            <td>
+                                <i class="material-icons button edit" ng-click="editar(producto)" data-toggle="modal" data-target="#miModal">Detalles</i>
+                                <i class="material-icons button delete" ng-click="BorrarProducto(producto.nombre)">Eliminar</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!--Modal para editar productos-->
+                <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Actualización de producto</h4>
+                            </div>
+                            <div class="modal-body">
+
+
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="productoActualizarForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Nombre -->
+                                                    <div class="form-group">
+                                                        <label>Nombre</label>
+                                                        <p>{{producto.nombre}}</p>
+                                                    </div>
+
+                                                    <!-- Cantidad -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoActualizarForm.cantidad.$invalid && (productoActualizarForm.prescripcion.$dirty || submitted)}">
+                                                        <label>Cantidad</label>
+                                                        <input type="number" name="cantidad" class="form-control" ng-model="producto.cantidad" placeholder="Cantidad" ng-required="true">
+                                                        <p ng-show="productoActualizarForm.cantidad.$error.required && (productoActualizarForm.cantidad.$dirty || submitted)" class="help-block">La cantidad del producto es requerida.</p>
+                                                    </div>
+
+
+
+
+                                                    <!-- Prescripción -->
+
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoActualizarForm.prescripcion.$invalid  && (productoActualizarForm.prescripcion.$dirty || submitted)}">
+                                                        <label>Prescripción</label>
+                                                        <select class="form-control" ng-model="producto.prescripcion" onchange="this.className=this.options[this.selectedIndex].className" required>
+                                                            <option value="" selected hidden>{{producto.prescripcion}}</option>
+                                                            <option value="Sí" class="form-control">Sí</option>
+                                                            <option value="No" class="form-control">No</option>
+                                                        </select>
+                                                        <p ng-show="productoActualizarForm.prescripcion.$error.required  && (productoActualizarForm.prescripcion.$dirty || submitted)" class="help-block">Seleccione la prescripcion.</p>
+                                                    </div>
+
+                                                    <!-- Casa farmaceutica  -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoActualizarForm.casaFarmaceutica.$invalid  && (productoActualizarForm.casaFarmaceutica.$dirty || submitted)}">
+                                                        <label>Casa farmacéutica</label>
+                                                        <select ng-model="producto.casaFarmaceutica" class="form-control" ng-required="true">
+                                                            <option ng-repeat="casaFarmaceutica in casaFarmaceuticas" value='{{casaFarmaceutica.opcion}}'>{{casaFarmaceutica.opcion}}</option>
+                                                        </select>
+                                                        <p ng-show="productoActualizarForm.casaFarmaceutica.$error.required  && (productoActualizarForm.casaFarmaceutica.$dirty || submitted)" class="help-block">La casa farmacéutica del producto es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Precio -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoActualizarForm.precio.$invalid && (productoActualizarForm.precio.$dirty || submitted)}">
+                                                        <label>Precio</label>
+                                                        <input type="number" name="precio" class="form-control" ng-model="producto.precio" placeholder="Precio en colones" ng-required="true">
+                                                        <p ng-show="productoActualizarForm.precio.$error.required && (productoActualizarForm.precio.$dirty || submitted)" class="help-block">El precio del producto es requerido.</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="productoActualizarForm.$invalid" ng-click="aplicarCambios()">Actualizar producto</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--Modal para crear productos-->
+                <div class="modal fade" id="modalCreacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrar2">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Creación de producto</h4>
+                            </div>
+                            <div class="modal-body">
+
+
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="productoForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Nombre -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.prescripcion.$invalid && (productoForm.prescripcion.$dirty || submitted)}">
+                                                        <label>Nombre</label>
+                                                        <input type="text" name="nombre" class="form-control" ng-model="nombre" placeholder="Nombre" ng-required="true">
+                                                        <p ng-show="productoForm.nombre.$error.required && (productoForm.nombre.$dirty || submitted)" class="help-block">El nombre del producto es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Cantidad -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.prescripcion.$invalid && (productoForm.prescripcion.$dirty || submitted)}">
+                                                        <label>Cantidad</label>
+                                                        <input type="number" name="cantidad" class="form-control" ng-model="cantidad" placeholder="Cantidad" ng-required="true">
+                                                        <p ng-show="productoForm.cantidad.$error.required && (productoForm.cantidad.$dirty || submitted)" class="help-block">La cantidad del producto es requerida.</p>
+                                                    </div>
+
+                                                    <!-- Prescripción -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.prescripcion.$invalid  && (productoForm.prescripcion.$dirty || submitted)}">
+                                                        <label>Prescripción</label>
+                                                        <select class="form-control" ng-model="prescripcion" onchange="this.className=this.options[this.selectedIndex].className" required>
+                                                            <option value="" selected hidden class="null">Tiene Prescripción</option>
+                                                            <option value="SI" class="form-control">SI</option>
+                                                            <option value="NO" class="form-control">NO</option>
+                                                        </select>
+                                                        <p ng-show="productoForm.prescripcion.$error.required  && (productoForm.prescripcion.$dirty || submitted)" class="help-block">Seleccione si el producto tiene prescripcion.</p>
+                                                    </div>
+
+                                                    <!-- Casa farmaceutica  -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.casaFarmaceutica.$invalid  && (productoForm.casaFarmaceutica.$dirty || submitted)}">
+                                                        <label>Casa farmacéutica</label>
+                                                        <select ng-model="casaFarmaceutica" class="form-control" ng-required="true">
+                                                            <option ng-repeat="casaFarmaceutica in casaFarmaceuticas" value='{{casaFarmaceutica.opcion}}'>{{casaFarmaceutica.opcion}}</option>
+                                                        </select>
+                                                        <p ng-show="productoForm.casaFarmaceutica.$error.required  && (productoForm.casaFarmaceutica.$dirty || submitted)" class="help-block">La casa farmacéutica del producto es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Precio -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.precio.$invalid && (productoForm.precio.$dirty || submitted)}">
+                                                        <label>Precio</label>
+                                                        <input type="number" name="precio" class="form-control" ng-model="precio" placeholder="Precio en colones" ng-required="true">
+                                                        <p ng-show="productoForm.precio.$error.required && (productoForm.precio.$dirty || submitted)" class="help-block">El precio del producto es requerido.</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="productoForm.$invalid" ng-click="agregarProducto()">Crear producto</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

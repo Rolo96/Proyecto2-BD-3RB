@@ -1,0 +1,324 @@
+﻿<!--Se adhieren los diseños de las css-->
+<link href="../Estilos/Tablas.css" rel="stylesheet" />
+<link href="../Estilos/modals.css" rel="stylesheet" />
+
+<!--Se incluye el menu lateral de la vista administrador-->
+<ng-include src="urlAdmin"></ng-include>
+<div id="page-wrapper">
+    <div id="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <!--Encabezado de la pagina-->
+                <h1> Administración de empleados </h1>
+                <!--Boton para crear productos-->
+                <div class="row">
+                    <div class="container" align="center" style="width:830px; margin-bottom:-35px; margin-top:50px">
+                        <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-backdrop="false" data-target="#modalCreacion"> Agregar</button>
+                    </div>
+                </div>
+
+                <!--Tabla en la que se muestran todos los empleados-->
+                <table>
+                    <thead>
+                        <tr><th colspan="5">Lista de Empleados</th></tr>
+                        <tr>
+                            <th>Numero de Cédula</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th colspan="2">Sucursal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="empleado in empleados">
+                            <td>{{empleado.cedula}}</td>
+                            <td>{{empleado.nombre1}}</td>
+                            <td>{{empleado.apellido1}}</td>
+                            <td>{{empleado.sucursal}}</td>
+                            <td>
+                                <i class="material-icons button edit" ng-click="editar(empleado)" data-toggle="modal" data-target="#miModal">Detalles</i>
+                                <i class="material-icons button delete" ng-click="BorrarEmpleado(empleado.cedula)">Eliminar</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <!--Modal para la edicion de los empleados-->
+                <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Actualización de empleado</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="empleadoAcForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Cedula -->
+                                                    <div class="form-group">
+                                                        <label>Cédula</label>
+                                                        <p>{{empleado.cedula}}</p>
+                                                    </div>
+
+                                                    <!-- Primer Nombre -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoAcForm.nombre1.$invalid && (empleadoAcForm.nombre1.$dirty || submitted)}">
+                                                        <label>Primer Nombre</label>
+                                                        <input type="text" name="nombre1" class="form-control" ng-model="empleado.nombre1" placeholder="Primer Nombre" ng-required="true">
+                                                        <p ng-show="empleadoAcForm.nombre1.$error.required && (empleadoAcForm.nombre1.$dirty || submitted)" class="help-block">El primer nombre del empleado es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Segundo Nombre -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Segundo Nombre
+                                                        </label>
+                                                        <input class="form-control" id="nombre2" name="nombre2" ng-model="empleado.nombre2" placeholder="Segundo Nombre" type="text" />
+                                                    </div>
+
+                                                    <!-- Primer Apellido -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoAcForm.apellido1.$invalid && (empleadoAcForm.apellido1.$dirty || submitted)}">
+                                                        <label>Primer Apellido</label>
+                                                        <input type="text" name="apellido1" class="form-control" ng-model="empleado.apellido1" placeholder="Primer Apellido" ng-required="true">
+                                                        <p ng-show="empleadoAcForm.apellido1.$error.required && (empleadoAcForm.apellido1.$dirty || submitted)" class="help-block">El primer apellido del empleado es requerido.</p>
+                                                    </div>
+
+
+                                                    <!-- Segundo Apellido -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Segundo Apellido
+                                                        </label>
+                                                        <input class="form-control" id="apellido2" name="apellido2" ng-model="empleado.apellido2" placeholder="Segundo Apellido" type="text" />
+                                                    </div>
+
+
+                                                    <!-- Provincia -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoAcForm.provincia.$invalid  && (empleadoAcForm.provincia.$dirty || submitted)}">
+                                                        <label>Provincia</label>
+                                                        <select class="form-control" ng-model="empleado.provincia" onchange="this.className=this.options[this.selectedIndex].className" required>
+                                                            <option value="" selected hidden class="null">Selecione una provincia</option>
+                                                            <option value="San Jose" class="form-control">San Jose</option>
+                                                            <option value="Alajuela" class="form-control">Alajuela</option>
+                                                            <option value="Cartago" class="form-control">Cartago</option>
+                                                            <option value="Heredia" class="form-control">Heredia</option>
+                                                            <option value="Ganacaste" class="form-control">Guanacaste</option>
+                                                            <option value="Puntarenas" class="form-control">Puntarenas</option>
+                                                            <option value="Limón" class="form-control">Limón</option>
+                                                        </select>
+                                                        <p ng-show="empleadoAcForm.provincia.$error.required  && (empleadoAcForm.provincia.$dirty || submitted)" class="help-block">Seleccione la provincia.</p>
+                                                    </div>
+
+                                                    <!-- Cuidad-->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Ciudad
+                                                        </label>
+                                                        <input class="form-control" id="cuidad" name="cuidad" ng-model="empleado.ciudad" placeholder="Cuidad" type="text" />
+                                                    </div>
+
+                                                    <!-- Señas -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Señas
+                                                        </label>
+                                                        <input class="form-control" id="señas" ng-model="empleado.senas" name="señas" placeholder="Señas" type="text" />
+                                                    </div>
+
+                                                    <!-- Fecha Nacimiento-->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Fecha de nacimiento del cliente
+                                                        </label>
+                                                        <input onblur="type='text'" onfocus="(this.type='date')" placeholder="{{empleado.fechaNacimiento}}" name="fecha" class="form-control" ng-model="empleadoFechaNacimiento" />
+                                                    </div>
+
+
+                                                    <!-- Sucursal -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoAcForm.sucursal.$invalid  && (empleadoAcForm.sucursal.$dirty || submitted)}">
+                                                        <label>Sucursal</label>
+                                                        <select ng-model="empleado.sucursal" class="form-control" ng-required="true">
+                                                            <option ng-repeat="sucursal in sucursales" value='{{sucursal.opcion}}'>{{sucursal.opcion}}</option>
+                                                        </select>
+                                                        <p ng-show="empleadoAcForm.sucursal.$error.required  && (empleadoAcForm.sucursal.$dirty || submitted)" class="help-block">La sucursal a la que pertenece el empleado es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Rol -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoAcForm.rol.$invalid  && (empleadoAcForm.rol.$dirty || submitted)}">
+                                                        <label>Rol</label>
+                                                        <select ng-model="empleado.rol" class="form-control" ng-required="true">
+                                                            <option ng-repeat="rol in roles" value='{{rol.opcion}}'>{{rol.opcion}}</option>
+                                                        </select>
+                                                        <p ng-show="empleadoAcForm.rol.$error.required  && (empleadoAcForm.rol.$dirty || submitted)" class="help-block">El rol del empleado es requerido.</p>
+                                                    </div>
+
+
+
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="empleadoAcForm.$invalid" ng-click="aplicarCambios()">Actualizar empleado</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para agregar empleados nuevos -->
+                <div class="modal fade" id="modalCreacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrar2">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Creación de empleado</h4>
+                            </div>
+                            <div class="modal-body">
+
+
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="empleadoForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Cedula -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoForm.cedula.$invalid  && (empleadoForm.cedula.$dirty || submitted) }">
+                                                        <label>Cédula</label>
+                                                        <input type="number" name="cedula" class="form-control" ng-model="cedula" ng-maxlength="9" placeholder="Ejm: 101110111" ng-required="true">
+                                                        <p ng-show="empleadoForm.cedula.$error.required  && (empleadoForm.cedula.$dirty || submitted)" class="help-block">La cédula del empleado es requerida</p>
+                                                    </div>
+
+                                                    <!-- Primer Nombre -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoForm.nombre1.$invalid && (empleadoForm.nombre1.$dirty || submitted)}">
+                                                        <label>Primer Nombre</label>
+                                                        <input type="text" name="nombre1" class="form-control" ng-model="nombre1" placeholder="Primer Nombre" ng-required="true">
+                                                        <p ng-show="empleadoForm.nombre1.$error.required && (empleadoForm.nombre1.$dirty || submitted)" class="help-block">El primer nombre del empleado es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Segundo Nombre -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Segundo Nombre
+                                                        </label>
+                                                        <input class="form-control" id="nombre2" name="nombre2" placeholder="Segundo Nombre" type="text" ng-model="nombre2" />
+                                                    </div>
+
+                                                    <!-- Primer Apellido -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoForm.apellido1.$invalid && (empleadoForm.apellido1.$dirty || submitted)}">
+                                                        <label>Primer Apellido</label>
+                                                        <input type="text" name="apellido1" class="form-control" ng-model="apellido1" placeholder="Primer Apellido" ng-required="true">
+                                                        <p ng-show="empleadoForm.apellido1.$error.required && (empleadoForm.apellido1.$dirty || submitted)" class="help-block">El primer apellido del empleado es requerido.</p>
+                                                    </div>
+
+
+                                                    <!-- Segundo Apellido -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Segundo Apellido
+                                                        </label>
+                                                        <input class="form-control" id="apellido2" name="apellido2" placeholder="Segundo Apellido" type="text" ng-model="apellido2" />
+                                                    </div>
+
+
+                                                    <!-- PASSWORD -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoForm.password.$invalid && (empleadoForm.password.$dirty || submitted)}">
+                                                        <label>Contraseña</label>
+                                                        <input type="Password" name="password" class="form-control" ng-model="password" placeholder="Contraseña del empleado" ng-required="true">
+                                                        <p ng-show="empleadoForm.password.$error.required && (empleadoForm.password.$dirty || submitted)" class="help-block">La contraseña del empleado es requerida</p>
+                                                    </div>
+
+                                                    <!-- Provincia -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoForm.provincia.$invalid  && (empleadoForm.provincia.$dirty || submitted)}">
+                                                        <label>Provincia</label>
+                                                        <select class="form-control" ng-model="provincia" onchange="this.className=this.options[this.selectedIndex].className" required>
+                                                            <option value="" selected hidden class="null">Selecione una provinca</option>
+                                                            <option value="San Jose" class="form-control">San Jose</option>
+                                                            <option value="Alajuela" class="form-control">Alajuela</option>
+                                                            <option value="Cartago" class="form-control">Cartago</option>
+                                                            <option value="Heredia" class="form-control">Heredia</option>
+                                                            <option value="Ganacaste" class="form-control">Guanacaste</option>
+                                                            <option value="Puntarenas" class="form-control">Puntarenas</option>
+                                                            <option value="Limón" class="form-control">Limón</option>
+                                                        </select>
+                                                        <p ng-show="empleadoForm.provincia.$error.required  && (empleadoForm.provincia.$dirty || submitted)" class="help-block">Seleccione la provincia.</p>
+                                                    </div>
+
+                                                    <!-- Cuidad-->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Cuidad
+                                                        </label>
+                                                        <input class="form-control" id="cuidad" name="cuidad" placeholder="Cuidad" type="text" ng-model="ciudad" />
+                                                    </div>
+
+                                                    <!-- Señas -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Señas
+                                                        </label>
+                                                        <input class="form-control" id="señas" name="señas" placeholder="Señas" type="text" ng-model="senas" />
+                                                    </div>
+
+                                                    <!-- Fecha Nacimiento-->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Fecha de Nacimiento
+                                                        </label>
+                                                        <input class="form-control" id="fecha" name="fecha" placeholder="MM/DD/YYYY" onfocus="type='date'" onblur="type='text'" ng-model="fechaNacimiento" required />
+                                                    </div>
+
+                                                    <!-- Sucursal -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoForm.sucursal.$invalid  && (empleadoForm.sucursal.$dirty || submitted)}">
+                                                        <label>Sucursal</label>
+                                                        <select ng-model="sucursal" class="form-control" ng-required="true">
+                                                            <option ng-repeat="sucursal in sucursales" value='{{sucursal.opcion}}'>{{sucursal.opcion}}</option>
+                                                        </select>
+                                                        <p ng-show="empleadoForm.sucursal.$error.required  && (empleadoForm.sucursal.$dirty || submitted)" class="help-block">La sucursal a la que pertenece el empleado es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Rol -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoForm.rol.$invalid  && (empleadoForm.rol.$dirty || submitted)}">
+                                                        <label>Rol</label>
+                                                        <select ng-model="rol" class="form-control" ng-required="true">
+                                                            <option ng-repeat="rol in roles" value='{{rol.opcion}}'>{{rol.opcion}}</option>
+                                                        </select>
+                                                        <p ng-show="empleadoForm.rol.$error.required  && (empleadoForm.rol.$dirty || submitted)" class="help-block">El rol del empleado es requerido.</p>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="empleadoForm.$invalid" ng-click="agregarEmpleado()">Crear Empleado</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

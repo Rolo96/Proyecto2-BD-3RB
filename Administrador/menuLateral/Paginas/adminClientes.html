@@ -1,0 +1,286 @@
+﻿<!--Se adhieren los diseños de las css-->
+<link href="../Estilos/Tablas.css" rel="stylesheet" />
+<link href="../Estilos/modals.css" rel="stylesheet" />
+
+<!--Se incluye el menu lateral de la vista administrador-->
+<ng-include src="urlAdmin"></ng-include>
+<div id="page-wrapper">
+    <div id="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <!--Encabezado de la pagina-->
+                <h1> Administración de clientes </h1>
+                <!--Boton para crear clientes-->
+                <div class="row">
+                    <div class="container" align="center" style="width:830px; margin-bottom:-35px; margin-top:50px">
+
+                        <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-backdrop="false" data-target="#modalCreacion"> Agregar</button>
+                    </div>
+                </div>
+                <!--Tabla en la que se muestran todos los clientes-->
+                <table>
+                    <thead>
+                        <tr><th colspan="4">Lista de Clientes</th></tr>
+                        <tr>
+                            <th>Numero de Cédula</th>
+                            <th>Nombre</th>
+                            <th colspan="2">Apellido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="cliente in clientes">
+                            <td>{{cliente.cedula}}</td>
+                            <td>{{cliente.nombre1}}</td>
+                            <td>{{cliente.apellido1}}</td>
+                            <td>
+                                <i class="material-icons button edit" ng-click="editar(cliente)" data-toggle="modal" data-target="#miModal">Detalles</i>
+                                <i class="material-icons button delete" ng-click="BorrarCliente(cliente.cedula)">Eliminar</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!--Modal para la edicion de los clientes-->
+                <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Actualización de cliente</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="clienteActualizarForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Cedula -->
+                                                    <div class="form-group">
+                                                        <label>Cédula</label>
+                                                        <p>{{cliente.cedula}}</p>
+                                                    </div>
+
+                                                    <!-- Primer Nombre -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : clienteActualizarForm.nombre1.$invalid && (clienteActualizarForm.nombre1.$dirty || submitted)}">
+                                                        <label>Primer Nombre</label>
+                                                        <input type="text" name="nombre1" class="form-control" ng-model="cliente.nombre1" placeholder="Primer Nombre" ng-required="true">
+                                                        <p ng-show="clienteActualizarForm.nombre1.$error.required && (clienteActualizarForm.nombre1.$dirty || submitted)" class="help-block">El primer nombre del ciente es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Segundo Nombre -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Segundo Nombre
+                                                        </label>
+                                                        <input class="form-control" id="nombre2" name="nombre2" ng-model="cliente.nombre2" placeholder="Segundo Nombre" type="text" />
+                                                    </div>
+
+                                                    <!-- Primer Apellido -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : clienteActualizarForm.apellido1.$invalid && (clienteActualizarForm.apellido1.$dirty || submitted)}">
+                                                        <label>Primer Apellido</label>
+                                                        <input type="text" name="apellido1" class="form-control" ng-model="cliente.apellido1" placeholder="Primer Apellido" ng-required="true">
+                                                        <p ng-show="clienteActualizarForm.apellido1.$error.required && (clienteActualizarForm.apellido1.$dirty || submitted)" class="help-block">El primer apellido del cliente es requerido.</p>
+                                                    </div>
+
+
+                                                    <!-- Segundo Apellido -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Segundo Apellido
+                                                        </label>
+                                                        <input class="form-control" id="apellido2" name="apellido2" ng-model="cliente.apellido2" placeholder="Segundo Apellido" type="text" />
+                                                    </div>
+
+                                                    <!-- Provincia -->
+                                                    <div class="form-group">
+                                                        <label>Provincia</label>
+                                                        <select class="form-control" ng-model="provi" onchange="this.className=this.options[this.selectedIndex].className">
+                                                            <option value="" selected hidden>{{cliente.provincia}}</option>
+                                                            <option value="San Jose" class="form-control">San Jose</option>
+                                                            <option value="Alajuela" class="form-control">Alajuela</option>
+                                                            <option value="Cartago" class="form-control">Cartago</option>
+                                                            <option value="Heredia" class="form-control">Heredia</option>
+                                                            <option value="Ganacaste" class="form-control">Guanacaste</option>
+                                                            <option value="Puntarenas" class="form-control">Puntarenas</option>
+                                                            <option value="Limón" class="form-control">Limón</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Cuidad-->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Ciudad
+                                                        </label>
+                                                        <input class="form-control" id="cuidad" name="cuidad" ng-model="cliente.ciudad" placeholder="Cuidad" type="text" />
+                                                    </div>
+
+                                                    <!-- Señas -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Señas
+                                                        </label>
+                                                        <input class="form-control" id="señas" ng-model="cliente.senas" name="señas" placeholder="Señas" type="text" />
+                                                    </div>
+
+                                                    <!-- Fecha Nacimiento-->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Fecha de nacimiento del cliente
+                                                        </label>
+                                                        <input onblur="type='text'" onfocus="(this.type='date')" placeholder="{{cliente.fechaNacimiento}}" name="fecha" class="form-control" ng-model="cliente.fechaNacimiento" />
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="clienteActualizarForm.$invalid" ng-click="aplicarCambios()">Actualizar Cliente</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Modal para agregar clientes nuevos -->
+                <div class="modal fade" id="modalCreacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" ng-click="ceroTels()" data-dismiss="modal" aria-label="Close" id="botoncerrar2">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Creación de cliente</h4>
+                            </div>
+                            <div class="modal-body">
+
+
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <br class="row">
+                                        <br class="col-md-6 col-sm-6 col-xs-12">
+                                        <form method="post" name="clienteForm" ng-submit="submitForm()" novalidate>
+                                            <!-- Cedula -->
+                                            <div class="form-group" ng-class="{ 'has-error' : clienteForm.cedula.$invalid  && (clienteForm.cedula.$dirty || submitted) }">
+                                                <label>Cédula</label>
+                                                <input type="number" name="cedula" class="form-control" ng-model="cedula" ng-maxlength="9" placeholder="Ejm: 101110111" ng-required="true">
+                                                <p ng-show="clienteForm.cedula.$error.required  && (clienteForm.cedula.$dirty || submitted)" class="help-block">La cédula del cliente es requerida</p>
+                                            </div>
+
+                                            <!-- Primer Nombre -->
+                                            <div class="form-group" ng-class="{ 'has-error' : clienteForm.nombre1.$invalid && (clienteForm.nombre1.$dirty || submitted)}">
+                                                <label>Primer Nombre</label>
+                                                <input type="text" name="nombre1" class="form-control" ng-model="nombre1" placeholder="Primer Nombre" ng-required="true">
+                                                <p ng-show="clienteForm.nombre1.$error.required && (clienteForm.nombre1.$dirty || submitted)" class="help-block">El primer nombre del ciente es requerido.</p>
+                                            </div>
+
+                                            <!-- Segundo Nombre -->
+                                            <div class="form-group ">
+                                                <label>
+                                                    Segundo Nombre
+                                                </label>
+                                                <input class="form-control" id="nombre2" name="nombre2" placeholder="Segundo Nombre" type="text" ng-model="nombre2" />
+                                            </div>
+
+                                            <!-- Primer Apellido -->
+                                            <div class="form-group" ng-class="{ 'has-error' : clienteForm.apellido1.$invalid && (clienteForm.apellido1.$dirty || submitted)}">
+                                                <label>Primer Apellido</label>
+                                                <input type="text" name="apellido1" class="form-control" ng-model="apellido1" placeholder="Primer Apellido" ng-required="true">
+                                                <p ng-show="clienteForm.apellido1.$error.required && (clienteForm.apellido1.$dirty || submitted)" class="help-block">El primer apellido del cliente es requerido.</p>
+                                            </div>
+
+
+                                            <!-- Segundo Apellido -->
+                                            <div class="form-group ">
+                                                <label>
+                                                    Segundo Apellido
+                                                </label>
+                                                <input class="form-control" id="apellido2" name="apellido2" placeholder="Segundo Apellido" type="text" ng-model="apellido2" />
+                                            </div>
+
+
+                                            <!-- PASSWORD -->
+                                            <div class="form-group" ng-class="{ 'has-error' : clienteForm.password.$invalid && (clienteForm.password.$dirty || submitted)}">
+                                                <label>Contraseña</label>
+                                                <input type="Password" name="password" class="form-control" ng-model="password" placeholder="Contraseña del cliente" ng-required="true">
+                                                <p ng-show="clienteForm.password.$error.required && (clienteForm.password.$dirty || submitted)" class="help-block">La contraseña del cliente es requerida</p>
+                                            </div>
+
+                                            <!-- Provincia -->
+                                            <div class="form-group" ng-class="{ 'has-error' : clienteForm.provincia.$invalid  && (clienteForm.provincia.$dirty || submitted)}">
+                                                <label>Provincia</label>
+                                                <select class="form-control" ng-model="provincia" onchange="this.className=this.options[this.selectedIndex].className" required>
+                                                    <option value="" selected hidden class="null">Selecione una provinca</option>
+                                                    <option value="San Jose" class="form-control">San Jose</option>
+                                                    <option value="Alajuela" class="form-control">Alajuela</option>
+                                                    <option value="Cartago" class="form-control">Cartago</option>
+                                                    <option value="Heredia" class="form-control">Heredia</option>
+                                                    <option value="Ganacaste" class="form-control">Guanacaste</option>
+                                                    <option value="Puntarenas" class="form-control">Puntarenas</option>
+                                                    <option value="Limón" class="form-control">Limón</option>
+                                                </select>
+                                                <p ng-show="clienteForm.provincia.$error.required  && (clienteForm.provincia.$dirty || submitted)" class="help-block">Seleccione la provincia.</p>
+                                            </div>
+
+                                            <!-- Cuidad-->
+                                            <div class="form-group ">
+                                                <label>
+                                                    Cuidad
+                                                </label>
+                                                <input class="form-control" id="cuidad" name="cuidad" placeholder="Cuidad" type="text" ng-model="ciudad" />
+                                            </div>
+
+                                            <!-- Señas -->
+                                            <div class="form-group ">
+                                                <label>
+                                                    Señas
+                                                </label>
+                                                <input class="form-control" id="señas" name="señas" placeholder="Señas" type="text" ng-model="senas" />
+                                            </div>
+
+                                            <!-- Fecha Nacimiento-->
+                                            <div class="form-group ">
+                                                <label>
+                                                    Fecha de Nacimiento del cliente
+                                                </label>
+                                                <input class="form-control" id="fecha" name="fecha" placeholder="MM/DD/YYYY" type="date" ng-model="fechaNacimiento" required />
+                                            </div>
+
+
+                                            <!-- Telefono -->
+                                            <div class="form-group" ng-class="{ 'has-error' : clienteForm.telefono.$invalid && (clienteForm.telefono.$dirty || submitted)}">
+                                                <label>Teléfono</label>
+                                                <input type="number" name="telefono" class="form-control" ng-model="telefono" ng-maxlength="8" placeholder="Ejm: 8888 8888" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary" ng-disabled="clienteForm.$invalid" ng-click="agregarCliente()">Crear cliente</button>
+                                                    <button type="button" class="btn btn-primary" ng-click="ceroTels()" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,226 @@
+﻿<!--Se adhieren los diseños de las css-->
+<link href="../Estilos/modals.css" rel="stylesheet" />
+<link href="../Estilos/Tablas.css" rel="stylesheet" />
+
+<!--Se incluye el menu lateral de la vista administrador-->
+<ng-include src="urlAdmin"></ng-include>
+<div id="page-wrapper">
+    <div id="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <!--Encabezado de la pagina-->
+                <h1> Administración de sucursales</h1>
+                <!--Boton para crear roles-->
+                <div class="row">
+                    <div class="container" align="center" style="width:830px; margin-bottom:-35px; margin-top:50px">
+                        <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#modalCreacion"> Agregar</button>
+                    </div>
+                </div>
+                <!--Tabla en la que se muestran todas las sucursales-->
+                <table>
+                    <thead>
+                        <tr><th colspan="4">Lista de sucursales</th></tr>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Provincia</th>
+                            <th colspan="2">Ciudad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="sucursal in sucursales">
+                            <td>{{sucursal.nombre}}</td>
+                            <td>{{sucursal.provincia}}</td>
+                            <td>{{sucursal.ciudad}}</td>
+                            <td>
+                                <i class="material-icons button edit" ng-click="editar(sucursal)" data-toggle="modal" data-target="#miModal">Detalles</i>
+                                <i class="material-icons button delete" ng-click="BorrarSucursal(sucursal.nombre)">Eliminar</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Actualización de sucursal</h4>
+                            </div>
+                            <div class="modal-body">
+
+
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="sucursalActualizarForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Nombre -->
+                                                    <div class="form-group">
+                                                        <label>Nombre</label>
+                                                        <p>{{sucursal.nombre}}</p>
+                                                    </div>
+
+                                                    <!-- Provincia -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : sucursalActualizarForm.provincia.$invalid  && (sucursalActualizarForm.provincia.$dirty || submitted)}">
+                                                        <label>Provincia</label>
+                                                        <select ng-model="sucursal.provincia" class="form-control" onchange="this.className=this.options[this.selectedIndex].className">
+                                                            <option value="" selected disable hidden>{{sucursal.provincia}}</option>
+                                                            <option value='San José' class="form-control">San José</option>
+                                                            <option value='Cartago' class="form-control">Cartago</option>
+                                                            <option value='Heredia' class="form-control">Heredia</option>
+                                                            <option value='Alajuela' class="form-control">Alajuela</option>
+                                                            <option value='Guanacaste' class="form-control">Guanacaste</option>
+                                                            <option value='Puntarenas' class="form-control">Puntarenas</option>
+                                                            <option value='Limón' class="form-control">Limón</option>
+                                                        </select>
+                                                        <p ng-show="sucursalActualizarForm.provincia.$error.required  && (sucursalActualizarForm.provincia.$dirty || submitted)" class="help-block">Seleccione la provincia.</p>
+                                                    </div>
+
+                                                    <div class="form-group ">
+                                                        <!-- Ciudad-->
+                                                        <label>
+                                                            Ciudad
+                                                        </label>
+                                                        <input class="form-control" id="ciudad" name="ciudad" ng-model="sucursal.ciudad" placeholder="Ciudad" type="text" />
+                                                    </div>
+
+                                                    <!-- Señas -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Señas
+                                                        </label>
+                                                        <input class="form-control" id="señas" ng-model="sucursal.senas" name="señas" placeholder="Señas" type="text" />
+                                                    </div>
+
+
+
+                                                    <!-- Descripcion -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Descripción
+                                                        </label>
+                                                        <input class="form-control" id="descripcion" ng-model="sucursal.descripcion" name="descripcion" placeholder="Descripción" type="text" />
+                                                    </div>
+
+                                                    <!--Cedula del administrador-->
+                                                    <div class="form-group" ng-class="{ 'has-error' : sucursalActualizarForm.administrador.$invalid  && (sucursalActualizarForm.administrador.$dirty || submitted) }">
+                                                        <label>Administrador de la sucursal</label>
+                                                        <input type="number" name="administrador" class="form-control" ng-model="sucursal.administrador" placeholder="Cédula del administrador" ng-required="true" onkeydown="return (event.key !== 'e' && event.key !=='+' && event.key !=='-' && event.key !== ',' && event.key !=='.')">
+                                                        <p ng-show="sucursalActualizarForm.administrador.$error.required  && (sucursalActualizarForm.administrador.$dirty || submitted)" class="help-block">La cédula del administrador es requerida.</p>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="sucursalActualizarForm.$invalid" ng-click="aplicarCambios()">Actualizar sucursal</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para la cracion de sucursal-->
+
+                <div class="modal fade" id="modalCreacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrar2">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Creación de sucursal</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="sucursalForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Nombre -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : sucursalForm.nombre.$invalid  && (sucursalForm.nombre.$dirty || submitted) }">
+                                                        <label>Nombre</label>
+                                                        <input type="text" name="nombre" id="num" class="form-control" ng-model="nombre" placeholder="Nombre de la Sucursal" ng-required="true">
+                                                        <p ng-show="sucursalForm.nombre.$error.required  && (sucursalForm.nombre.$dirty || submitted)" class="help-block">El nombre de la sucursal es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Descripcion -->
+                                                    <div class="form-group">
+                                                        <label>
+                                                            Descripción
+                                                        </label>
+                                                        <input type="text" name="descripcion" class="form-control" ng-model="descripcion" placeholder="Descripción de la sucursal">
+                                                    </div>
+
+
+                                                    <!-- Provincia -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : sucursalForm.provincia.$invalid  && (sucursalForm.provincia.$dirty || submitted)}">
+                                                        <label>Provincia</label>
+                                                        <select class="form-control" ng-model="provincia" onchange="this.className=this.options[this.selectedIndex].className" required>
+                                                            <option value="" selected hidden class="null">Selecione una provinca</option>
+                                                            <option value="San Jose" class="form-control">San Jose</option>
+                                                            <option value="Alajuela" class="form-control">Alajuela</option>
+                                                            <option value="Cartago" class="form-control">Cartago</option>
+                                                            <option value="Heredia" class="form-control">Heredia</option>
+                                                            <option value="Ganacaste" class="form-control">Guanacaste</option>
+                                                            <option value="Puntarenas" class="form-control">Puntarenas</option>
+                                                            <option value="Limón" class="form-control">Limón</option>
+                                                        </select>
+                                                        <p ng-show="sucursalForm.provincia.$error.required  && (sucursalForm.provincia.$dirty || submitted)" class="help-block">Seleccione una provincia.</p>
+                                                    </div>
+
+                                                    <!-- Ciudad-->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Ciudad
+                                                        </label>
+                                                        <input class="form-control" id="ciudad" name="ciudad" placeholder="Ciudad" type="text" ng-model="ciudad" />
+                                                    </div>
+
+                                                    <!-- Señas -->
+                                                    <div class="form-group ">
+                                                        <label>
+                                                            Señas
+                                                        </label>
+                                                        <input class="form-control" id="senas" name="senas" placeholder="Señas" type="text" ng-model="senas" />
+                                                    </div>
+
+                                                    <!--Cedula del administrador-->
+                                                    <div class="form-group" ng-class="{ 'has-error' : sucursalForm.cedula.$invalid  && (sucursalForm.cedula.$dirty || submitted) }">
+                                                        <label>Administrador de la sucursal</label>
+                                                        <input type="number" name="cedula" class="form-control" ng-model="cedula" placeholder="Cédula del administrador" ng-required="true" onkeydown="return (event.key !== 'e' && event.key !=='+' && event.key !=='-' && event.key !== ',' && event.key !=='.')">
+                                                        <p ng-show="sucursalForm.cedula.$error.required  && (sucursalForm.cedula.$dirty || submitted)" class="help-block">La cédula del administrador es requerida.</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="sucursalForm.$invalid" ng-click="agregarSucursal()">Crear sucursal</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
