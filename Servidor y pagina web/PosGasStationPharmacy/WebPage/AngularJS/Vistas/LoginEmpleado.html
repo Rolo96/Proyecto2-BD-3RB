@@ -1,0 +1,15 @@
+﻿<link href="Estilos/login.css" rel="stylesheet" />
+
+<div class="container-fluid bloque1">
+    <div class="row">
+        <div class="container-fluid bloque2">
+            <form class="formulario" name="formLogin" ng-submit="submitForm()">
+                <h3 class="form-encabezado" align="center">Ingreso de empleado</h3>
+                <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+                <input type="number" name="loginCedula" class="form-control" placeholder="Cédula" ng-model="loginCedula" required autofocus>
+                <input type="password" style="margin-bottom:30px" name="loginPassword" class="form-control" min="0" ng-model="loginPassword" placeholder="Contraseña" ng-required="true" required>
+                <button class="botoningresar btn-block" type="button" ng-click="login()" ng-disabled="formLogin.loginCedula.$invalid||formLogin.loginPassword.$invalid">Login</button>
+            </form>
+        </div>
+    </div>
+</div>

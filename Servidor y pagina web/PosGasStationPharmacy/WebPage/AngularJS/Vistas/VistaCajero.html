@@ -1,0 +1,516 @@
+﻿<link href="Estilos/modal.css" rel="stylesheet" />
+<link href="Estilos/tabla.css" rel="stylesheet" />
+
+<div class="page-wrapper">
+    <div class="side-body">
+        <div class="container">
+            <div style="margin-top:10px" class="col-sm-3 col-md-offset-4">
+                <button type="button" class="btn-block btn-primary form-control" ng-click="obtenerPedidos()" data-toggle="modal" data-target="#modalPedidos">Ver pedidos</button>
+            </div>
+            <div class="col-sm-8 col-sm-offset-2">
+                <!-- PAGE HEADER -->
+                <div class="page-header"><h1>Facturar venta nueva</h1></div>
+                <!-- FORM : YOU CAN DISABLE, HTML5 VALIDATION BY USING "novalidate" ATTRIBUTE-->
+                <form name="facturaForm" ng-submit="submitForm()" style="margin-bottom:10px" novalidate>
+                    <!-- Cedula del cliente-->
+                    <div class="form-group">
+                        <label>Cédula del cliente</label>
+                        <input type="number" ng-blur="verificarCliente()" name="cedulaCliente" class="form-control" ng-model="cedulaCliente" placeholder="Ingrese la cédula" onkeydown="return (event.key !== 'e' && event.key !=='+' && event.key !=='-' && event.key !== ',' && event.key !=='.')" required>
+                    </div>
+                    <!--Codigo de la venta-->
+                    <div class="form-group">
+                        <label>Código para la venta</label>
+                        <input type="number" name="codigoVenta" class="form-control" ng-model="codigoVenta" placeholder="Ingrese el código" onkeydown="return (event.key !== 'e' && event.key !=='+' && event.key !=='-' && event.key !== ',' && event.key !=='.')" required>
+                    </div>
+
+                    <!-- Tipo de pago -->
+                    <div class="form-group">
+                        <label></label>
+                    </div>
+
+                    <!--Productos de la venta-->
+                    <!--Productos-->
+                    <div class="form-group-lg">
+                        <label>Seleccione los productos de la venta</label>
+                        <div class="container-fluid" style="overflow-y:scroll; height:150px;">
+                            <div class="row" style="width:100%">
+                                <div class="col-sm-5">
+                                    <label>Nombre</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Precio</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Prescripción</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Cantidad</label>
+                                </div>
+                            </div>
+                            <!--Seleccion de productos-->
+                            <div class="row" ng-repeat="producto in productos" style="width:100%">
+                                <!--Nombre-->
+                                <div class="col-sm-5">
+                                    <p style="display:inline-block">{{producto.medicamento}}.</p>
+                                </div>
+                                <!--Precio-->
+                                <div class="col-sm-2">
+                                    <p style="display:inline-block">₡{{producto.precio}}.</p>
+                                </div>
+                                <!--Prescripcion-->
+                                <div class="col-sm-3">
+                                    <p style="display:inline-block">{{producto.prescripcion}}.</p>
+                                </div>
+                                <!--Cantidad seleccionada-->
+                                <div class="col-sm-2">
+                                    <input type="number" ng-blur="verificarCantidad(producto.medicamento, this);" name="posiCajaCantidad" id="posiCajaCantidad" ng-model="cantidad" class="form-control" style="width:80px; height:20px; display:inline-block" min="0" max="1000" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <button type="submit" class="btn btn-primary btn-block" ng-disabled="facturaForm.$invalid" ng-click="facturarVenta()">Facturar venta</button>
+                <table style="width:100%; ">
+                    <thead>
+                        <tr><th colspan="3">Última venta facturada</th></tr>
+                        <tr>
+                            <th>Número de venta</th>
+                            <th colspan="2">Cliente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="venta in ventaFacturada">
+                            <td>{{venta.id}}</td>
+                            <td>{{venta.cliente}}</td>
+                            <td>
+                                <i class="material-icons button edit" data-toggle="modal" ng-click="" data-target="#editarFactura">Detalles/Editar</i>
+                                <i class="material-icons button delete" data-toggle="modal" ng-click="salvarFactura('n')">Salvar</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modal para mostrar y eliminar los productos de una venta -->
+        <div class="modal fade" id="editarFactura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Productos de la venta</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                        <div class="bootstrap-iso">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <table style="width:100%; " class="tablaEliminacion">
+                                        <thead>
+                                            <tr><th colspan="2">Facturas salvadas</th></tr>
+                                            <tr>
+                                                <th colspan="2">Productos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="producto in ventaFacturada[0].productos">
+                                                <td>{{producto.medicamento}}</td>
+                                                <td>
+                                                    <i class="material-icons button delete" data-toggle="modal" ng-click="productoBorrar(producto.medicamento)" data-target="#verificarSupervisor">Eliminar</i><!--ng-click="eliminarProductoFacturado(producto.medicamento)"-->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para verificar supervisor-->
+        <div class="modal fade" id="verificarSupervisor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrarSupervisor">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Autorización del supervisor</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                        <div class="bootstrap-iso">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <form method="post" name="supervisorForm" ng-submit="submitForm()" novalidate>
+                                            <!-- Supervisor -->
+                                            <div class="form-group">
+                                                <label>Cédula</label>
+                                                <input type="number" name="cedulaSupervisor" id="num" class="form-control" ng-model="cedulaSupervisor" placeholder="Ingrese la cedula del supervisor" required>
+                                            </div>
+                                            <!-- contrasena -->
+                                            <div class="form-group">
+                                                <label>Contraseña</label>
+                                                <input type="password" name="contrasenaSupervisor" class="form-control" ng-model="contrasenaSupervisor" placeholder="Ingrse la contraseña" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary" ng-disabled="supervisorForm.$invalid" ng-click="eliminarProductoFacturado()">Procesar</button>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para agregar clientes nuevos -->
+        <div class="modal fade" id="crearClienteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCloseNewCliente">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Creación de cliente</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                        <div class="bootstrap-iso">
+                            <div class="container-fluid">
+                                <form method="post" name="crearClienteForm" ng-submit="submitForm()" novalidate>
+                                    <!-- Cedula -->
+                                    <div class="form-group">
+                                        <label>Cédula</label>
+                                        <input type="number" name="cedulaCrarCliente" class="form-control" ng-model="cedulaCrearCliente" ng-maxlength="9" placeholder="Ejm: 101110111" ng-required="true">
+                                    </div>
+                                    <!-- Primer Nombre -->
+                                    <div class="form-group">
+                                        <label>Primer Nombre</label>
+                                        <input type="text" name="nombre1CrarCliente" class="form-control" ng-model="nombre1CrearCliente" placeholder="Primer Nombre" ng-required="true">
+                                    </div>
+                                    <!-- Segundo Nombre -->
+                                    <div class="form-group ">
+                                        <label>
+                                            Segundo Nombre
+                                        </label>
+                                        <input class="form-control" id="nombre2CrarCliente" name="nombre2" placeholder="Segundo Nombre" type="text" ng-model="nombre2CrearCliente" />
+                                    </div>
+                                    <!-- Primer Apellido -->
+                                    <div class="form-group">
+                                        <label>Primer Apellido</label>
+                                        <input type="text" name="apellido1CrarCliente" class="form-control" ng-model="apellido1CrearCliente" placeholder="Primer Apellido" ng-required="true">
+                                    </div>
+
+                                    <!-- Segundo Apellido -->
+                                    <div class="form-group ">
+                                        <label>Segundo Apellido</label>
+                                        <input class="form-control" id="apellido2CrarCliente" name="apellido2" placeholder="Segundo Apellido" type="text" ng-model="apellido2CrearCliente" />
+                                    </div>
+                                    <!-- PASSWORD -->
+                                    <div class="form-group">
+                                        <label>Contraseña</label>
+                                        <input type="Password" name="passwordCrarCliente" class="form-control" ng-model="passwordCrearCliente" placeholder="Contraseña del cliente" ng-required="true">
+                                    </div>
+                                    <!-- Provincia -->
+                                    <div class="form-group">
+                                        <label>Provincia</label>
+                                        <select class="form-control" ng-model="provinciaCrearCliente" onchange="this.className=this.options[this.selectedIndex].className" required>
+                                            <option value="" selected hidden class="null">Selecione una provinca</option>
+                                            <option value="San Jose" class="form-control">San Jose</option>
+                                            <option value="Alajuela" class="form-control">Alajuela</option>
+                                            <option value="Cartago" class="form-control">Cartago</option>
+                                            <option value="Heredia" class="form-control">Heredia</option>
+                                            <option value="Ganacaste" class="form-control">Guanacaste</option>
+                                            <option value="Puntarenas" class="form-control">Puntarenas</option>
+                                            <option value="Limón" class="form-control">Limón</option>
+                                        </select>
+                                    </div>
+                                    <!-- Cuidad-->
+                                    <div class="form-group ">
+                                        <label>Cuidad</label>
+                                        <input class="form-control" id="cuidad" name="ciudadCrarCliente" placeholder="Cuidad" type="text" ng-model="ciudadCrearCliente" />
+                                    </div>
+                                    <!-- Señas -->
+                                    <div class="form-group ">
+                                        <label>Señas</label>
+                                        <input class="form-control" id="señas" name="senasCrarCliente" placeholder="Señas" type="text" ng-model="senasCrearCliente" />
+                                    </div>
+                                    <!-- Fecha Nacimiento-->
+                                    <div class="form-group ">
+                                        <label>Fecha de nacimiento</label>
+                                        <input class="form-control" id="fecha" name="fechaNacimientoCrarCliente" placeholder="MM/DD/YYYY" onblur="type='text'" onfocus="type='date'" ng-model="fechaNacimientoCrearCliente" required />
+                                    </div>
+                                    <!--Padecimientos-->
+                                    <div class="form-group">
+                                        <label>Padecimientos</label>
+                                        <table style="width:100%; margin-top:-15px" class="tablaProVenta">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <input type="text" class="form-control" id="padecimiento" name="padecimientoCrearCliente" ng-model="padecimientoCrearCliente" placeholder="Nombre" />
+                                                    </td>
+                                                    <td>
+                                                        <input onfocus="type='date'" onblur="type='text'" class="form-control" id="fechaPadeCrearCliente" name="fechaPadeCrearCliente" placeholder="Fecha" />
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger btn-number" ng-click="quitarEspacioPade()"><span class="glyphicon glyphicon-minus"></span></button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-success btn-number" ng-click="agregarEspacioPade()"><span class="glyphicon glyphicon-plus"></span></button>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-repeat="cantidad in arregloRepeat">
+                                                    <td>
+                                                        <input type="text" class="form-control" id="padecimiento" name="padecimientoCrearCliente" placeholder="Nombre" />
+                                                    </td>
+                                                    <td>
+                                                        <input onfocus="type='date'" onblur="type='text'" class="form-control" id="fechaPadeCrearCliente" name="fechaPadeCrearCliente" placeholder="Fecha" ng-model="fechaPadeCrarCliente" />
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Telefono -->
+                                    <div class="form-group">
+                                        <label>Teléfonos</label>
+
+                                        <table style="width:100%; margin-top:-15px" class="tablaProVenta">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <input type="number" name="telefonoCrearCliente" class="form-control" ng-maxlength="8" placeholder="Ejm: 8888 8888" required>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger btn-number" ng-click="quitarEspacioTels()"><span class="glyphicon glyphicon-minus"></span></button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-success btn-number" ng-click="agregarEspacioTels()"><span class="glyphicon glyphicon-plus"></span></button>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-repeat="telefono in arregloTels">
+                                                    <td>
+                                                        <input type="number" name="telefonoCrearCliente" class="form-control" ng-maxlength="8" placeholder="Ejm: 8888 8888" required>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="form-group">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary" ng-disabled="crearClienteForm.$invalid" ng-click="crearCliente()">Crear cliente</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Modal resumen cierre de caja-->
+        <div class="modal fade" id="modalResumen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Resumen de ventas realizadas</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                        <div class="bootstrap-iso">
+                            <div class="container" style="width:100%">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <form method="post" name="tiqueteForm" ng-submit="submitForm()" novalidate>
+                                            <!--Ventas realizadas-->
+                                            <label>Facturas</label>
+                                            <table style="width:100%;" class="tablaProVenta">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Número de factura</th>
+                                                        <th>Cliente</th>
+                                                        <th>Fecha y hora</th>
+                                                        <th colspan="2">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="factura in resumen">
+                                                        <td>{{factura.factura}}</td>
+                                                        <td>{{factura.cliente}}</td>
+                                                        <td>{{factura.fecha}} {{factura.hora}}</td>
+                                                        <td>₡{{factura.total}}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <!-- Saldo incio -->
+                                            <div class="form-group">
+                                                <label>Saldo inicial</label>
+                                                <p>₡{{plataInicio}}</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Saldo final</label>
+                                                <p>₡{{plataFinal}}</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <div>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para mostrar los pedidos que necesitan facturarse -->
+        <div class="modal fade" id="modalPedidos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrarPedidos">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                        <div class="bootstrap-iso">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <table style="width:100%;" class="tablaPedidos">
+                                        <thead>
+                                            <tr><th colspan="4">Pedidos de clientes</th></tr>
+                                            <tr>
+                                                <th>Cédula</th>
+                                                <th colspan="2">No. Pedido</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="pedido in pedidos">
+                                                <td>{{pedido.cliente}}</td>
+                                                <td>{{pedido.numero}}</td>
+                                                <td>
+                                                    <i class="material-icons button edit" data-toggle="modal" ng-click="salvarFactura(pedido.numero)" >Salvar</i><!--ng-click="eliminarProductoFacturado(producto.medicamento)"-->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal tiquete de venta-->
+        <div class="modal fade" id="modalTiquete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Tiquete de factura</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                        <div class="bootstrap-iso">
+                            <div class="container" style="width:100%">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <form method="post" name="tiqueteForm" ng-submit="submitForm()" novalidate>
+                                            <!-- NUmero de factura -->
+                                            <div class="form-group">
+                                                <label>Número de factura</label>
+                                                <p>{{tiquete.factura}}</p>
+                                            </div>
+                                            <!-- Cliente -->
+                                            <div class="form-group">
+                                                <label>Cliente</label>
+                                                <p>{{tiquete.cliente}}</p>
+                                            </div>
+                                            <!-- Empleado -->
+                                            <div class="form-group">
+                                                <label>Cajero</label>
+                                                <p>{{tiquete.cajero}}</p>
+                                            </div>
+                                            <!-- Sucursal -->
+                                            <div class="form-group">
+                                                <label>Sucursal</label>
+                                                <p>{{tiquete.sucursal}}</p>
+                                            </div>
+                                            <!-- Caja -->
+                                            <div class="form-group">
+                                                <label>Caja</label>
+                                                <p>{{tiquete.caja}}</p>
+                                            </div>
+                                            <!-- Fecha -->
+                                            <div class="form-group">
+                                                <label>Fecha</label>
+                                                <p>{{tiquete.fecha}}</p>
+                                            </div>
+                                            <!--Productos-->
+                                            <table style="width:100%;" class="tablaProVenta">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Producto</th>
+                                                        <th>Prescripcion</th>
+                                                        <th>Cantidad</th>
+                                                        <th colspan="2">Precio</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="producto in tiquete.productos">
+                                                        <td>{{producto.medicamento}}</td>
+                                                        <td>{{producto.prescripcion}}</td>
+                                                        <td>{{producto.cantidad}}</td>
+                                                        <td>₡{{producto.precio}}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <!-- Total -->
+                                            <div class="form-group">
+                                                <label>Total a cobrar</label>
+                                                <p>₡{{tiquete.total}}</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <div>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
