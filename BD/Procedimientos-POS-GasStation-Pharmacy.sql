@@ -655,6 +655,61 @@ CREATE OR REPLACE FUNCTION delete_cliente(newCedula INT)
 
 ---------------------------------------------------------------------------------
 
+--Procedimiento almacenado para insertar un pedido
+CREATE OR REPLACE FUNCTION insert_pedido(newNumero INT,newSucursal varchar(50),newCliente int,newMedicamento JSON) 
+    RETURNS void AS $$
+    DECLARE 
+    medica VARCHAR(50);
+    cant INT;
+    medicamentoCompra JSON;
+    BEGIN 
+    	IF NOT EXISTS (SELECT * FROM SUCURSAL WHERE Nombre = newSucursal AND Activo) THEN
+            RAISE EXCEPTION 'Sucursal no registrada';
+        ELSIF NOT EXISTS (SELECT * FROM CLIENTE WHERE Cedula = newCliente AND Activo) THEN
+            RAISE EXCEPTION 'Cliente no registrado';
+        ELSE
+        	INSERT INTO PEDIDO(Numero,Sucursal,Cliente,Activo) 
+            VALUES(newNumero,newSucursal,newCliente,true);
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD 
+                                       host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('INSERT INTO PEDIDO(Numero,Sucursal,Cliente,Activo) 
+            						VALUES('||''''||newNumero||''''||','||''''||newSucursal||''''||',
+                                    '||''''||newCliente||''''||',true);');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
+        END IF;
+        FOR medicamentoCompra IN SELECT * FROM json_array_elements(newMedicamento)
+        LOOP
+        	IF EXISTS (SELECT * FROM MEDICAMENTO WHERE Nombre = medicamentoCompra->>'Medicamento' AND Activo) THEN
+            	INSERT INTO MEDICAMENTOXPEDIDO(Pedido,Medicamento,Cantidad,Activo) 
+                    VALUES (newNumero,medicamentoCompra->>'Medicamento',(medicamentoCompra->>'Cantidad')::INT,true);
+               	BEGIN
+                    medica=medicamentoCompra->>'Medicamento';
+                  	cant=(medicamentoCompra->>'Cantidad')::INT;
+                    perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD 
+                                          host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                    perform dblink_exec('INSERT INTO MEDICAMENTOXPEDIDO(Pedido,Medicamento,Cantidad,Activo)
+                                       VALUES('||''''||newNumero||''''||','||''''||medica||''''||','||''''||cant||''''||',true);');
+                    perform dblink_disconnect();
+                    EXCEPTION WHEN OTHERS THEN 
+                    BEGIN 
+                        RAISE NOTICE 'No hay conexion con la otra base de datos';
+                    END;
+                END;
+            ELSE
+            	RAISE EXCEPTION 'Medicamento no registrado';
+           	END IF;
+        END LOOP;
+    END;
+    $$ LANGUAGE plpgsql;
+    
+---------------------------------------------------------------------------------
+
 --Procedimiento almacenado para insertar una factura
 CREATE OR REPLACE FUNCTION insert_factura(newFecha DATE,newHora TIME,newTotal INT,newTipo CHAR(1),newCaja INT,
                                           newEmpleado INT,newCliente INT,newMedicamento JSON) 

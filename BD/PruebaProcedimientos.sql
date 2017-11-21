@@ -13,6 +13,7 @@
 --SELECT insert_empleado(115599001,'Juan','Julian','Mora','Mora','San Jose','San Pedro','Contiguo UCR','01-10-1970','12345','BombaTica Alajuela','Administrador');
 --SELECT update_empleado(115599001,'Juan','Andres','Arias','Mora','San Jose','San Pedro','Contiguo UCR','01-10-1970','12345','BombaTica Alajuela','Administrador');
 --SELECT delete_empleado(115599001);
+--SELECT insert_pedido(1,'Phischel PZ',116220539,'[{"Medicamento":"Inyección Insulina","Cantidad":1}]');
 --SELECT insert_factura('03-04-2017','10:16:00',15000,'E',4,405670923,305430785,'[{"Medicamento":"Inyección Insulina","Cantidad":1}]');
 --SELECT update_medicamentoxsucursal('BombaTica Alajuela','Fasinul',10);
 --SELECT insert_medicamentoxsucursal('BombaTica Alajuela','Fasinul',60,10,30);
