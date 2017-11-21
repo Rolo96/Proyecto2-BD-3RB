@@ -406,7 +406,7 @@ CREATE OR REPLACE FUNCTION insert_empleado(newCedula INT,newNombre1 VARCHAR(20),
 --Procedimiento almacenado para actualizar un empleado
 CREATE OR REPLACE FUNCTION update_empleado(newCedula INT,newNombre1 VARCHAR(20),newNombre2 VARCHAR(20),
     newApellido1 VARCHAR(20),newApellido2 VARCHAR(20),newProvincia VARCHAR(20),newCiudad VARCHAR(20),
-    newSenas VARCHAR(50),newFechaNacimiento DATE,newContrasena VARCHAR(200),newSucursal VARCHAR(50),newRol VARCHAR(20)) 
+    newSenas VARCHAR(50),newFechaNacimiento DATE,newSucursal VARCHAR(50),newRol VARCHAR(20)) 
     RETURNS void AS $$
 	BEGIN 
     	IF EXISTS (SELECT * FROM EMPLEADO WHERE Cedula = newCedula AND Activo) THEN
@@ -417,7 +417,7 @@ CREATE OR REPLACE FUNCTION update_empleado(newCedula INT,newNombre1 VARCHAR(20),
             ELSE
         		UPDATE EMPLEADO SET Nombre1=newNombre1,Nombre2=newNombre2,Apellido1=newApellido1,Apellido2=newApellido2,
             	Provincia=newProvincia,Ciudad=newCiudad,Senas=newSenas,FechaNacimiento=newFechaNacimiento,
-            	Contrasena=newContrasena,Sucursal=newSucursal,Rol=newRol WHERE Cedula=newCedula;
+            	Sucursal=newSucursal,Rol=newRol WHERE Cedula=newCedula;
                 BEGIN
                 	perform dblink_connect('dbname=gasStationBD2 user=BD3rb password=proyecto2BD 
                                            host=gspbd2.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
@@ -425,7 +425,7 @@ CREATE OR REPLACE FUNCTION update_empleado(newCedula INT,newNombre1 VARCHAR(20),
                                         Apellido1='||''''||newApellido1||''''||',Apellido2='||''''||newApellido2||''''||',
                                         Provincia='||''''||newProvincia||''''||',Ciudad='||''''||newCiudad||''''||',
                                     	Senas='||''''||newSenas||''''||',FechaNacimiento='||''''||newFechaNacimiento||''''||',
-                                    	Contrasena=md5('||''''||newContrasena||''''||'),Sucursal='||''''||newSucursal||''''||',
+                                    	Sucursal='||''''||newSucursal||''''||',
                                         Rol='||''''||newRol||''''||' WHERE Cedula='||''''||newCedula||''''||';');
                     perform dblink_disconnect();
                     EXCEPTION WHEN OTHERS THEN 
