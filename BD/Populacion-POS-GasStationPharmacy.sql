@@ -9,7 +9,7 @@ INSERT INTO SUCURSAL (Nombre, Provincia, Ciudad, Senas,Descripcion, Compania, Ac
              'Sede central','Farmacias Phischel',true);
              
 INSERT INTO SUCURSAL (Nombre, Provincia, Ciudad, Senas,Descripcion, Compania, Activo)
-     VALUES ('Phischel PZ','San José','Pérez Zeledón','Costado norte de la escuela doce de Marzo',
+     VALUES ('Phischel PZ','San Jose','Perez Zeledon','Costado norte de la escuela doce de Marzo',
              'Sede PZ','Farmacias Phischel',true);
 
 INSERT INTO SUCURSAL (Nombre, Provincia, Ciudad, Senas,Descripcion, Compania, Activo)
@@ -35,7 +35,7 @@ INSERT INTO ROL(Nombre,Descripcion,Activo)
 INSERT INTO EMPLEADO(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,
 	Ciudad,Senas,FechaNacimiento,Contrasena,Sucursal,Activo,Rol)
      VALUES (303150415,'Pedro','Alberto','Perez','Lopez','Cartago','Tejar'
-           ,'100 metros sur de Restaurante El Quijongo','15-02-1980'
+           ,'100 metros sur de Restaurante El Quijongo','12-02-1980'
 		   ,md5('1234'),'Phischel Central',true,'Administrador');
 
 INSERT INTO EMPLEADO(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,
@@ -53,19 +53,19 @@ INSERT INTO EMPLEADO(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,
 INSERT INTO EMPLEADO(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,
 	Ciudad,Senas,FechaNacimiento,Contrasena,Sucursal,Activo,Rol)
      VALUES (405670923,'Ronny','Fabian','Romero','Nuñez','Limon','Sixaola'
-           ,'contiguo a la iglesia sixaola','23-06-1987'
+           ,'Contiguo a la iglesia sixaola','11-06-1987'
 		   ,md5('1234567'),'Phischel PZ',true,'Farmaceutico');
 
 INSERT INTO EMPLEADO(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,
 	Ciudad,Senas,FechaNacimiento,Contrasena,Sucursal,Activo,Rol)
      VALUES (505821723,'Olman','Dennis','Fajardo','Calvo','Alajuela','Poas'
-           ,'carretera al volcan Poas','19-08-1973'
+           ,'Carretera al volcan Poas','05-08-1973'
 		   ,md5('a12d'),'BombaTica Nicoya',true,'Farmaceutico');
 
 INSERT INTO EMPLEADO(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia,
 	Ciudad,Senas,FechaNacimiento,Contrasena,Sucursal,Activo,Rol)
      VALUES (614580522,'Allen','Saul','McDonald','Brenes','Puntarenas','Sardinal'
-           ,'ruta a Caldera','04-07-1992'
+           ,'Ruta a Caldera','04-07-1992'
 		   ,md5 ('9gfa'),'BombaTica Alajuela',true,'Farmaceutico');
 
 INSERT INTO PROVEEDOR(Nombre,Sede,Activo)
@@ -88,15 +88,12 @@ INSERT INTO PROVEEDOR(Nombre,Sede,Activo)
 
 INSERT INTO MEDICAMENTO(Nombre,Precio,Prescripcion,Proveedor,Activo)
      VALUES ('Panadol ExtraFuerte',200,false,'Bayer',true);
+     
+INSERT INTO MEDICAMENTO(Nombre,Precio,Prescripcion,Proveedor,Activo)
+     VALUES ('Gex Dia',225,false,'Pfizer',true);
 
 INSERT INTO MEDICAMENTO(Nombre,Precio,Prescripcion,Proveedor,Activo)
-     VALUES ('Gex Noche',175,false,'SANOFI',true);
-
-INSERT INTO MEDICAMENTO(Nombre,Precio,Prescripcion,Proveedor,Activo)
-     VALUES ('Gex Día',225,false,'Pfizer',true);
-
-INSERT INTO MEDICAMENTO(Nombre,Precio,Prescripcion,Proveedor,Activo)
-     VALUES ('Inyección Insulina',12000,true,'SANOFI',true);
+     VALUES ('Inyeccion Insulina',12000,true,'SANOFI',true);
 
 INSERT INTO MEDICAMENTO(Nombre,Precio,Prescripcion,Proveedor,Activo)
      VALUES ('Alka Seltzer',75,false,'Roche',true);
@@ -113,19 +110,19 @@ INSERT INTO CLIENTE(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia
 INSERT INTO CLIENTE(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia
            ,Ciudad,Senas,FechaNacimiento,Prioridad,Contrasena,Activo)
      VALUES (509450161,'Rony','Jose','Paniagua','Colindres','Guanacaste','Nandayure'
-           ,'500 metros sur de la pulperia Don Paco','03-09-1996',1
+           ,'500 metros sur de la pulperia Don Paco','03-09-1997',1
 		   ,md5 ('pani'),true);
 
 INSERT INTO CLIENTE(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia
            ,Ciudad,Senas,FechaNacimiento,Prioridad,Contrasena,Activo)
-     VALUES (116220539,'Bryan','Stephen','Abarca','Huever','San Jose','Perez Zeledon'
-           ,'contiguo al bar Mis Cositas','07-11-1997',1
-		   ,md5 ('huever'),true);
+     VALUES (116220539,'Bryan','Stephen','Abarca','Weber','San Jose','Perez Zeledon'
+           ,'contiguo al bar Mis Cositas','07-11-1996',1
+		   ,md5 ('weber'),true);
 
 INSERT INTO CLIENTE(Cedula,Nombre1,Nombre2,Apellido1,Apellido2,Provincia
            ,Ciudad,Senas,FechaNacimiento,Prioridad,Contrasena,Activo)
      VALUES (306380922,'Ronny','Nicky','Quesada','Arias','Cartago','Coris'
-           ,'350 metros este de la escuela de Coris','23-09-1996',1
+           ,'350 metros este de la escuela de Coris','03-09-1996',1
 		   ,md5 ('nicky'),true);
 
 INSERT INTO TELEFONOXCLIENTE(Cliente,Telefono,Activo)
@@ -207,40 +204,28 @@ INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,Stock
 	VALUES('Panadol ExtraFuerte','BombaTica Nicoya',50,20,50,true);
     
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Gex Noche','Phischel Central',50,30,60,true);
+	VALUES('Gex Dia','Phischel Central',50,40,80,true);
     
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Gex Noche','Phischel PZ',29,40,70,true);
-    
-INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Gex Noche','BombaTica Alajuela',40,20,50,true);
-    
-INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Gex Noche','BombaTica Nicoya',36,15,50,true);
-    
-INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Gex Día','Phischel Central',50,40,80,true);
-    
-INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Gex Día','Phischel PZ',35,15,50,true);
+	VALUES('Gex Dia','Phischel PZ',35,15,50,true);
    
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Gex Día','BombaTica Alajuela',40,20,50,true);
+	VALUES('Gex Dia','BombaTica Alajuela',40,20,50,true);
     
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Gex Día','BombaTica Nicoya',27,20,40,true);
+	VALUES('Gex Dia','BombaTica Nicoya',27,20,40,true);
     
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Inyección Insulina','Phischel Central',10,15,20,true);
+	VALUES('Inyeccion Insulina','Phischel Central',10,15,20,true);
    
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Inyección Insulina','Phischel PZ',7,10,15,true);
+	VALUES('Inyeccion Insulina','Phischel PZ',7,10,15,true);
     
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Inyección Insulina','BombaTica Alajuela',19,20,35,true);
+	VALUES('Inyeccion Insulina','BombaTica Alajuela',19,20,35,true);
     
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
-	VALUES('Inyección Insulina','BombaTica Nicoya',6,10,20,true);
+	VALUES('Inyeccion Insulina','BombaTica Nicoya',6,10,20,true);
     
 INSERT INTO MEDICAMENTOXSUCURSAL(Medicamento,Sucursal,Cantidad,StockMinimo,StockPromedio,Activo)
 	VALUES('Alka Seltzer','Phischel Central',50,30,60,true);
