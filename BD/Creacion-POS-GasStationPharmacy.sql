@@ -158,7 +158,7 @@ CREATE TABLE EMPLEADOXCAJA(
     EfectivoInicial int NOT NULL,
     EfectivoFinal int NOT NULL,
     Activo boolean NOT NULL,
-    PRIMARY KEY(Empleado,Caja)
+    PRIMARY KEY(Empleado,Caja,FechaInicio,FechaFinal,HoraInicio,HoraFinal)
 );
 
 ALTER TABLE SUCURSAL 
