@@ -710,6 +710,33 @@ CREATE OR REPLACE FUNCTION insert_pedido(newNumero INT,newSucursal varchar(50),n
 
 ---------------------------------------------------------------------------------
 
+--Procedimiento almacenado para insertar un pedido
+CREATE OR REPLACE FUNCTION delete_pedido(newNumero INT) 
+    RETURNS void AS $$
+    BEGIN 
+        IF NOT EXISTS (SELECT * FROM PEDIDO WHERE Numero = newNumero AND Activo) THEN
+            RAISE EXCEPTION 'Pedido no registrado';
+        ELSE
+            UPDATE PEDIDO SET Activo=false WHERE Numero=newNumero;
+            UPDATE MEDICAMENTOXPEDIDO SET Activo=false WHERE Pedido=newNumero;
+            BEGIN
+                perform dblink_connect('dbname=gasStationBD user=BD3rb password=proyecto2BD 
+                                  host=gspbd.cofvv40de4gk.us-west-1.rds.amazonaws.com port=5432');
+                perform dblink_exec('UPDATE PEDIDO SET Activo=false WHERE Numero = '||''''||newNumero||''''||';');
+                perform dblink_exec('UPDATE MEDICAMENTOXPEDIDO SET Activo=false WHERE Pedido = '||''''||newNumero||''''||';');
+                perform dblink_disconnect();
+                EXCEPTION WHEN OTHERS THEN 
+                BEGIN 
+                    RAISE NOTICE 'No hay conexion con la otra base de datos';
+                END;
+            END;
+        END IF;
+    END;
+    $$ LANGUAGE plpgsql;
+    
+    
+---------------------------------------------------------------------------------
+
 --Procedimiento almacenado para insertar una factura
 CREATE OR REPLACE FUNCTION insert_factura(newFecha DATE,newHora TIME,newTotal INT,newTipo CHAR(1),newCaja INT,
                                           newEmpleado INT,newCliente INT,newMedicamento JSON) 
