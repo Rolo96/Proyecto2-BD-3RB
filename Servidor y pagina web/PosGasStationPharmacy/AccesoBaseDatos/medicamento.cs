@@ -18,6 +18,7 @@ namespace AccesoBaseDatos
         {
             this.medicamentoxfactura = new HashSet<medicamentoxfactura>();
             this.medicamentoxsucursal = new HashSet<medicamentoxsucursal>();
+            this.medicamentoxpedido = new HashSet<medicamentoxpedido>();
         }
     
         public string nombre { get; set; }
@@ -29,5 +30,6 @@ namespace AccesoBaseDatos
         public virtual ICollection<medicamentoxfactura> medicamentoxfactura { get; set; }
         public virtual ICollection<medicamentoxsucursal> medicamentoxsucursal { get; set; }
         public virtual proveedor proveedor1 { get; set; }
+        public virtual ICollection<medicamentoxpedido> medicamentoxpedido { get; set; }
     }
 }

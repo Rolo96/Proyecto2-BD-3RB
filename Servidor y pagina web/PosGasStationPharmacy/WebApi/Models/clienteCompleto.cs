@@ -1,6 +1,9 @@
 ﻿using System;
 namespace WebApi.Models
 {
+    /// <summary>
+    /// Clase que contiene toda la informacion que se recibe para el registr de clientes
+    /// </summary>
     public class clienteCompleto
     {
         public int cedula { get; set; }

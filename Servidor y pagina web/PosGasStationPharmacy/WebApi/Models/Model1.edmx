@@ -1,0 +1,1723 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="gasStationBDModel.Store" Provider="Devart.Data.PostgreSql" ProviderManifestToken="PostgreSQL, 9.6.3" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="administradorxsucursal">
+          <Key>
+            <PropertyRef Name="administrador" />
+            <PropertyRef Name="sucursal" />
+          </Key>
+          <Property Name="administrador" Type="int" Nullable="false" />
+          <Property Name="sucursal" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="caja">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+          <Property Name="sucursal" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="cedula" />
+          </Key>
+          <Property Name="cedula" Type="int" Nullable="false" />
+          <Property Name="nombre1" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre2" Type="varchar" MaxLength="20" />
+          <Property Name="apellido1" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="apellido2" Type="varchar" MaxLength="20" />
+          <Property Name="provincia" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ciudad" Type="varchar" MaxLength="30" />
+          <Property Name="senas" Type="varchar" MaxLength="50" />
+          <Property Name="fechanacimiento" Type="date" Nullable="false" />
+          <Property Name="contrasena" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="prioridad" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="compania">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="sede" Type="varchar" MaxLength="50" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="empleado">
+          <Key>
+            <PropertyRef Name="cedula" />
+          </Key>
+          <Property Name="cedula" Type="int" Nullable="false" />
+          <Property Name="nombre1" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre2" Type="varchar" MaxLength="20" />
+          <Property Name="apellido1" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="apellido2" Type="varchar" MaxLength="20" />
+          <Property Name="provincia" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ciudad" Type="varchar" MaxLength="20" />
+          <Property Name="senas" Type="varchar" MaxLength="50" />
+          <Property Name="fechanacimiento" Type="date" Nullable="false" />
+          <Property Name="contrasena" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+          <Property Name="sucursal" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="rol" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="empleadoxcaja">
+          <Key>
+            <PropertyRef Name="empleado" />
+            <PropertyRef Name="caja" />
+            <PropertyRef Name="fechainicio" />
+            <PropertyRef Name="fechafinal" />
+            <PropertyRef Name="horainicio" />
+            <PropertyRef Name="horafinal" />
+          </Key>
+          <Property Name="empleado" Type="int" Nullable="false" />
+          <Property Name="caja" Type="int" Nullable="false" />
+          <Property Name="fechainicio" Type="date" Nullable="false" />
+          <Property Name="fechafinal" Type="date" Nullable="false" />
+          <Property Name="horainicio" Type="time" Nullable="false" />
+          <Property Name="horafinal" Type="time" Nullable="false" />
+          <Property Name="efectivoinicial" Type="int" Nullable="false" />
+          <Property Name="efectivofinal" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="factura">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha" Type="date" Nullable="false" />
+          <Property Name="hora" Type="time" Nullable="false" />
+          <Property Name="total" Type="int" Nullable="false" />
+          <Property Name="tipo" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+          <Property Name="caja" Type="int" Nullable="false" />
+          <Property Name="empleado" Type="int" Nullable="false" />
+          <Property Name="cliente" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="medicamento">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="precio" Type="int" Nullable="false" />
+          <Property Name="prescripcion" Type="boolean" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+          <Property Name="proveedor" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="medicamentoxfactura">
+          <Key>
+            <PropertyRef Name="medicamento" />
+            <PropertyRef Name="factura" />
+          </Key>
+          <Property Name="medicamento" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="factura" Type="int" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="medicamentoxpedido">
+          <Key>
+            <PropertyRef Name="pedido" />
+            <PropertyRef Name="medicamento" />
+          </Key>
+          <Property Name="pedido" Type="int" Nullable="false" />
+          <Property Name="medicamento" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="medicamentoxsucursal">
+          <Key>
+            <PropertyRef Name="medicamento" />
+            <PropertyRef Name="sucursal" />
+          </Key>
+          <Property Name="medicamento" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="sucursal" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="stockminimo" Type="int" Nullable="false" />
+          <Property Name="stockpromedio" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="padecimiento">
+          <Key>
+            <PropertyRef Name="cliente" />
+            <PropertyRef Name="padecimiento" />
+            <PropertyRef Name="ano" />
+          </Key>
+          <Property Name="cliente" Type="int" Nullable="false" />
+          <Property Name="padecimiento" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ano" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="pedido">
+          <Key>
+            <PropertyRef Name="numero" />
+          </Key>
+          <Property Name="numero" Type="int" Nullable="false" />
+          <Property Name="sucursal" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="cliente" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="proveedor">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="sede" Type="varchar" MaxLength="50" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sucursal">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="provincia" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ciudad" Type="varchar" MaxLength="20" />
+          <Property Name="senas" Type="varchar" MaxLength="50" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+          <Property Name="compania" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="telefonoxcliente">
+          <Key>
+            <PropertyRef Name="cliente" />
+            <PropertyRef Name="telefono" />
+          </Key>
+          <Property Name="cliente" Type="int" Nullable="false" />
+          <Property Name="telefono" Type="int" Nullable="false" />
+          <Property Name="activo" Type="boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_admin_sucur">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="administradorxsucursal" Type="Self.administradorxsucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="administradorxsucursal">
+              <PropertyRef Name="administrador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_caja_emp">
+          <End Role="caja" Type="Self.caja" Multiplicity="1" />
+          <End Role="empleadoxcaja" Type="Self.empleadoxcaja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caja">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="empleadoxcaja">
+              <PropertyRef Name="caja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_caja_fac">
+          <End Role="caja" Type="Self.caja" Multiplicity="1" />
+          <End Role="factura" Type="Self.factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caja">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="factura">
+              <PropertyRef Name="caja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_cli_fac">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="factura" Type="Self.factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="factura">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_cliente_ped">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="padecimiento" Type="Self.padecimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="padecimiento">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_cliente_tel">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="telefonoxcliente" Type="Self.telefonoxcliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="telefonoxcliente">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_comp_sucur">
+          <End Role="compania" Type="Self.compania" Multiplicity="1" />
+          <End Role="sucursal" Type="Self.sucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="compania">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="sucursal">
+              <PropertyRef Name="compania" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_emp_caja">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="empleadoxcaja" Type="Self.empleadoxcaja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="empleadoxcaja">
+              <PropertyRef Name="empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_emp_fac">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="factura" Type="Self.factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="factura">
+              <PropertyRef Name="empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_fact_medica">
+          <End Role="factura" Type="Self.factura" Multiplicity="1" />
+          <End Role="medicamentoxfactura" Type="Self.medicamentoxfactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="factura">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="medicamentoxfactura">
+              <PropertyRef Name="factura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_medica_fact">
+          <End Role="medicamento" Type="Self.medicamento" Multiplicity="1" />
+          <End Role="medicamentoxfactura" Type="Self.medicamentoxfactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicamento">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamentoxfactura">
+              <PropertyRef Name="medicamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_medica_sucur">
+          <End Role="medicamento" Type="Self.medicamento" Multiplicity="1" />
+          <End Role="medicamentoxsucursal" Type="Self.medicamentoxsucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicamento">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamentoxsucursal">
+              <PropertyRef Name="medicamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_medicamento_ped">
+          <End Role="pedido" Type="Self.pedido" Multiplicity="1" />
+          <End Role="medicamentoxpedido" Type="Self.medicamentoxpedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pedido">
+              <PropertyRef Name="numero" />
+            </Principal>
+            <Dependent Role="medicamentoxpedido">
+              <PropertyRef Name="pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_medicamento_ped2">
+          <End Role="medicamento" Type="Self.medicamento" Multiplicity="1" />
+          <End Role="medicamentoxpedido" Type="Self.medicamentoxpedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicamento">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamentoxpedido">
+              <PropertyRef Name="medicamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ped_cli">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="pedido" Type="Self.pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="pedido">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ped_suc">
+          <End Role="sucursal" Type="Self.sucursal" Multiplicity="1" />
+          <End Role="pedido" Type="Self.pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="pedido">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proveedor_medi">
+          <End Role="proveedor" Type="Self.proveedor" Multiplicity="1" />
+          <End Role="medicamento" Type="Self.medicamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="proveedor">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamento">
+              <PropertyRef Name="proveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_rol_emp">
+          <End Role="rol" Type="Self.rol" Multiplicity="1" />
+          <End Role="empleado" Type="Self.empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="empleado">
+              <PropertyRef Name="rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sucur_admin">
+          <End Role="sucursal" Type="Self.sucursal" Multiplicity="1" />
+          <End Role="administradorxsucursal" Type="Self.administradorxsucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="administradorxsucursal">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sucur_caja">
+          <End Role="sucursal" Type="Self.sucursal" Multiplicity="1" />
+          <End Role="caja" Type="Self.caja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="caja">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sucur_emp">
+          <End Role="sucursal" Type="Self.sucursal" Multiplicity="1" />
+          <End Role="empleado" Type="Self.empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="empleado">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sucur_medica">
+          <End Role="sucursal" Type="Self.sucursal" Multiplicity="1" />
+          <End Role="medicamentoxsucursal" Type="Self.medicamentoxsucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamentoxsucursal">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="delete_cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newcedula" Type="int" Mode="In" />
+        </Function>
+        <Function Name="delete_empleado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newcedula" Type="int" Mode="In" />
+        </Function>
+        <Function Name="delete_medicamento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="nombremedicamento" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="delete_pedido" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnumero" Type="int" Mode="In" />
+        </Function>
+        <Function Name="delete_proveedor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="nombreproveedor" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="delete_sucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newcedula" Type="int" Mode="In" />
+          <Parameter Name="newnombre1" Type="varchar" Mode="In" />
+          <Parameter Name="newnombre2" Type="varchar" Mode="In" />
+          <Parameter Name="newapellido1" Type="varchar" Mode="In" />
+          <Parameter Name="newapellido2" Type="varchar" Mode="In" />
+          <Parameter Name="newprovincia" Type="varchar" Mode="In" />
+          <Parameter Name="newciudad" Type="varchar" Mode="In" />
+          <Parameter Name="newsenas" Type="varchar" Mode="In" />
+          <Parameter Name="newfechanacimiento" Type="date" Mode="In" />
+          <Parameter Name="newcontrasena" Type="varchar" Mode="In" />
+          <Parameter Name="newprioridad" Type="int" Mode="In" />
+          <Parameter Name="newtelefono" Type="json" Mode="In" />
+          <Parameter Name="newpadecimiento" Type="json" Mode="In" />
+        </Function>
+        <Function Name="insert_empleado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newcedula" Type="int" Mode="In" />
+          <Parameter Name="newnombre1" Type="varchar" Mode="In" />
+          <Parameter Name="newnombre2" Type="varchar" Mode="In" />
+          <Parameter Name="newapellido1" Type="varchar" Mode="In" />
+          <Parameter Name="newapellido2" Type="varchar" Mode="In" />
+          <Parameter Name="newprovincia" Type="varchar" Mode="In" />
+          <Parameter Name="newciudad" Type="varchar" Mode="In" />
+          <Parameter Name="newsenas" Type="varchar" Mode="In" />
+          <Parameter Name="newfechanacimiento" Type="date" Mode="In" />
+          <Parameter Name="newcontrasena" Type="varchar" Mode="In" />
+          <Parameter Name="newsucursal" Type="varchar" Mode="In" />
+          <Parameter Name="newrol" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_empleadoxcaja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newempleado" Type="int" Mode="In" />
+          <Parameter Name="newcaja" Type="int" Mode="In" />
+          <Parameter Name="newfechainicio" Type="date" Mode="In" />
+          <Parameter Name="newhorainicio" Type="time" Mode="In" />
+          <Parameter Name="newfechafinal" Type="date" Mode="In" />
+          <Parameter Name="newhorafinal" Type="time" Mode="In" />
+          <Parameter Name="newefectivoinicial" Type="int" Mode="In" />
+          <Parameter Name="newefectivofinal" Type="int" Mode="In" />
+        </Function>
+        <Function Name="insert_factura" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newfecha" Type="date" Mode="In" />
+          <Parameter Name="newhora" Type="time" Mode="In" />
+          <Parameter Name="newtotal" Type="int" Mode="In" />
+          <Parameter Name="newtipo" Type="char" Mode="In" />
+          <Parameter Name="newcaja" Type="int" Mode="In" />
+          <Parameter Name="newempleado" Type="int" Mode="In" />
+          <Parameter Name="newcliente" Type="int" Mode="In" />
+          <Parameter Name="newmedicamento" Type="json" Mode="In" />
+        </Function>
+        <Function Name="insert_medicamento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnombre" Type="varchar" Mode="In" />
+          <Parameter Name="newprecio" Type="int" Mode="In" />
+          <Parameter Name="newprescripcion" Type="boolean" Mode="In" />
+          <Parameter Name="newproveedor" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_medicamentoxsucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newsucursal" Type="varchar" Mode="In" />
+          <Parameter Name="newmedicamento" Type="varchar" Mode="In" />
+          <Parameter Name="newcantidad" Type="int" Mode="In" />
+          <Parameter Name="newstockminimo" Type="int" Mode="In" />
+          <Parameter Name="newstockpromedio" Type="int" Mode="In" />
+        </Function>
+        <Function Name="insert_pedido" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnumero" Type="int" Mode="In" />
+          <Parameter Name="newsucursal" Type="varchar" Mode="In" />
+          <Parameter Name="newcliente" Type="int" Mode="In" />
+          <Parameter Name="newmedicamento" Type="json" Mode="In" />
+        </Function>
+        <Function Name="insert_proveedor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnombre" Type="varchar" Mode="In" />
+          <Parameter Name="newsede" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_sucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnombre" Type="varchar" Mode="In" />
+          <Parameter Name="newprovincia" Type="varchar" Mode="In" />
+          <Parameter Name="newciudad" Type="varchar" Mode="In" />
+          <Parameter Name="newsenas" Type="varchar" Mode="In" />
+          <Parameter Name="newdescripcion" Type="varchar" Mode="In" />
+          <Parameter Name="newcompania" Type="varchar" Mode="In" />
+          <Parameter Name="newadministrador" Type="int" Mode="In" />
+        </Function>
+        <Function Name="update_cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newcedula" Type="int" Mode="In" />
+          <Parameter Name="newnombre1" Type="varchar" Mode="In" />
+          <Parameter Name="newnombre2" Type="varchar" Mode="In" />
+          <Parameter Name="newapellido1" Type="varchar" Mode="In" />
+          <Parameter Name="newapellido2" Type="varchar" Mode="In" />
+          <Parameter Name="newprovincia" Type="varchar" Mode="In" />
+          <Parameter Name="newciudad" Type="varchar" Mode="In" />
+          <Parameter Name="newsenas" Type="varchar" Mode="In" />
+          <Parameter Name="newfechanacimiento" Type="date" Mode="In" />
+          <Parameter Name="newprioridad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="update_empleado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newcedula" Type="int" Mode="In" />
+          <Parameter Name="newnombre1" Type="varchar" Mode="In" />
+          <Parameter Name="newnombre2" Type="varchar" Mode="In" />
+          <Parameter Name="newapellido1" Type="varchar" Mode="In" />
+          <Parameter Name="newapellido2" Type="varchar" Mode="In" />
+          <Parameter Name="newprovincia" Type="varchar" Mode="In" />
+          <Parameter Name="newciudad" Type="varchar" Mode="In" />
+          <Parameter Name="newsenas" Type="varchar" Mode="In" />
+          <Parameter Name="newfechanacimiento" Type="date" Mode="In" />
+          <Parameter Name="newsucursal" Type="varchar" Mode="In" />
+          <Parameter Name="newrol" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="update_medicamento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnombre" Type="varchar" Mode="In" />
+          <Parameter Name="newprecio" Type="int" Mode="In" />
+          <Parameter Name="newprescripcion" Type="boolean" Mode="In" />
+          <Parameter Name="newproveedor" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="update_medicamentoxsucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newsucursal" Type="varchar" Mode="In" />
+          <Parameter Name="newmedicamento" Type="varchar" Mode="In" />
+          <Parameter Name="newcantidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="update_proveedor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnombre" Type="varchar" Mode="In" />
+          <Parameter Name="newsede" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="update_sucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+          <Parameter Name="newnombre" Type="varchar" Mode="In" />
+          <Parameter Name="newprovincia" Type="varchar" Mode="In" />
+          <Parameter Name="newciudad" Type="varchar" Mode="In" />
+          <Parameter Name="newsenas" Type="varchar" Mode="In" />
+          <Parameter Name="newdescripcion" Type="varchar" Mode="In" />
+          <Parameter Name="newcompania" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="gasStationBDModelStoreContainer">
+          <EntitySet Name="administradorxsucursal" EntityType="Self.administradorxsucursal" Schema="public" store:Type="Tables" />
+          <EntitySet Name="caja" EntityType="Self.caja" Schema="public" store:Type="Tables" />
+          <EntitySet Name="cliente" EntityType="Self.cliente" Schema="public" store:Type="Tables" />
+          <EntitySet Name="compania" EntityType="Self.compania" Schema="public" store:Type="Tables" />
+          <EntitySet Name="empleado" EntityType="Self.empleado" Schema="public" store:Type="Tables" />
+          <EntitySet Name="empleadoxcaja" EntityType="Self.empleadoxcaja" Schema="public" store:Type="Tables" />
+          <EntitySet Name="factura" EntityType="Self.factura" Schema="public" store:Type="Tables" />
+          <EntitySet Name="medicamento" EntityType="Self.medicamento" Schema="public" store:Type="Tables" />
+          <EntitySet Name="medicamentoxfactura" EntityType="Self.medicamentoxfactura" Schema="public" store:Type="Tables" />
+          <EntitySet Name="medicamentoxpedido" EntityType="Self.medicamentoxpedido" Schema="public" store:Type="Tables" />
+          <EntitySet Name="medicamentoxsucursal" EntityType="Self.medicamentoxsucursal" Schema="public" store:Type="Tables" />
+          <EntitySet Name="padecimiento" EntityType="Self.padecimiento" Schema="public" store:Type="Tables" />
+          <EntitySet Name="pedido" EntityType="Self.pedido" Schema="public" store:Type="Tables" />
+          <EntitySet Name="proveedor" EntityType="Self.proveedor" Schema="public" store:Type="Tables" />
+          <EntitySet Name="rol" EntityType="Self.rol" Schema="public" store:Type="Tables" />
+          <EntitySet Name="sucursal" EntityType="Self.sucursal" Schema="public" store:Type="Tables" />
+          <EntitySet Name="telefonoxcliente" EntityType="Self.telefonoxcliente" Schema="public" store:Type="Tables" />
+          <AssociationSet Name="fk_admin_sucur" Association="Self.fk_admin_sucur">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="administradorxsucursal" EntitySet="administradorxsucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_caja_emp" Association="Self.fk_caja_emp">
+            <End Role="caja" EntitySet="caja" />
+            <End Role="empleadoxcaja" EntitySet="empleadoxcaja" />
+          </AssociationSet>
+          <AssociationSet Name="fk_caja_fac" Association="Self.fk_caja_fac">
+            <End Role="caja" EntitySet="caja" />
+            <End Role="factura" EntitySet="factura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_cli_fac" Association="Self.fk_cli_fac">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="factura" EntitySet="factura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_cliente_ped" Association="Self.fk_cliente_ped">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="padecimiento" EntitySet="padecimiento" />
+          </AssociationSet>
+          <AssociationSet Name="fk_cliente_tel" Association="Self.fk_cliente_tel">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="telefonoxcliente" EntitySet="telefonoxcliente" />
+          </AssociationSet>
+          <AssociationSet Name="fk_comp_sucur" Association="Self.fk_comp_sucur">
+            <End Role="compania" EntitySet="compania" />
+            <End Role="sucursal" EntitySet="sucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_emp_caja" Association="Self.fk_emp_caja">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="empleadoxcaja" EntitySet="empleadoxcaja" />
+          </AssociationSet>
+          <AssociationSet Name="fk_emp_fac" Association="Self.fk_emp_fac">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="factura" EntitySet="factura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_fact_medica" Association="Self.fk_fact_medica">
+            <End Role="factura" EntitySet="factura" />
+            <End Role="medicamentoxfactura" EntitySet="medicamentoxfactura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_medica_fact" Association="Self.fk_medica_fact">
+            <End Role="medicamento" EntitySet="medicamento" />
+            <End Role="medicamentoxfactura" EntitySet="medicamentoxfactura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_medica_sucur" Association="Self.fk_medica_sucur">
+            <End Role="medicamento" EntitySet="medicamento" />
+            <End Role="medicamentoxsucursal" EntitySet="medicamentoxsucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_medicamento_ped" Association="Self.fk_medicamento_ped">
+            <End Role="pedido" EntitySet="pedido" />
+            <End Role="medicamentoxpedido" EntitySet="medicamentoxpedido" />
+          </AssociationSet>
+          <AssociationSet Name="fk_medicamento_ped2" Association="Self.fk_medicamento_ped2">
+            <End Role="medicamento" EntitySet="medicamento" />
+            <End Role="medicamentoxpedido" EntitySet="medicamentoxpedido" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ped_cli" Association="Self.fk_ped_cli">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="pedido" EntitySet="pedido" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ped_suc" Association="Self.fk_ped_suc">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="pedido" EntitySet="pedido" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proveedor_medi" Association="Self.fk_proveedor_medi">
+            <End Role="proveedor" EntitySet="proveedor" />
+            <End Role="medicamento" EntitySet="medicamento" />
+          </AssociationSet>
+          <AssociationSet Name="fk_rol_emp" Association="Self.fk_rol_emp">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="empleado" EntitySet="empleado" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sucur_admin" Association="Self.fk_sucur_admin">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="administradorxsucursal" EntitySet="administradorxsucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sucur_caja" Association="Self.fk_sucur_caja">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="caja" EntitySet="caja" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sucur_emp" Association="Self.fk_sucur_emp">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="empleado" EntitySet="empleado" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sucur_medica" Association="Self.fk_sucur_medica">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="medicamentoxsucursal" EntitySet="medicamentoxsucursal" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="gasStationBDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="gasStationBDEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="BorrarCliente">
+          <Parameter Name="newcedula" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BorrarEmpleado">
+          <Parameter Name="newcedula" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BorrarMedicamento">
+          <Parameter Name="nombremedicamento" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="BorrarPedido">
+          <Parameter Name="newnumero" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BorrarProveedor">
+          <Parameter Name="nombreproveedor" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="BorrarSucursal">
+          <Parameter Name="newnombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarCliente">
+            <Parameter Name="newcedula" Mode="In" Type="Int32" />
+            <Parameter Name="newnombre1" Mode="In" Type="String" />
+            <Parameter Name="newnombre2" Mode="In" Type="String" />
+            <Parameter Name="newapellido1" Mode="In" Type="String" />
+            <Parameter Name="newapellido2" Mode="In" Type="String" />
+            <Parameter Name="newprovincia" Mode="In" Type="String" />
+            <Parameter Name="newciudad" Mode="In" Type="String" />
+            <Parameter Name="newsenas" Mode="In" Type="String" />
+            <Parameter Name="newfechanacimiento" Mode="In" Type="DateTime" />
+            <Parameter Name="newcontrasena" Mode="In" Type="String" />
+            <Parameter Name="newprioridad" Mode="In" Type="Int32" />
+            <Parameter Name="newtelefono" Mode="In" Type="String" />
+            <Parameter Name="newpadecimiento" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarEmpleado">
+            <Parameter Name="newcedula" Mode="In" Type="Int32" />
+            <Parameter Name="newnombre1" Mode="In" Type="String" />
+            <Parameter Name="newnombre2" Mode="In" Type="String" />
+            <Parameter Name="newapellido1" Mode="In" Type="String" />
+            <Parameter Name="newapellido2" Mode="In" Type="String" />
+            <Parameter Name="newprovincia" Mode="In" Type="String" />
+            <Parameter Name="newciudad" Mode="In" Type="String" />
+            <Parameter Name="newsenas" Mode="In" Type="String" />
+            <Parameter Name="newfechanacimiento" Mode="In" Type="DateTime" />
+            <Parameter Name="newcontrasena" Mode="In" Type="String" />
+            <Parameter Name="newsucursal" Mode="In" Type="String" />
+            <Parameter Name="newrol" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarFactura">
+            <Parameter Name="newfecha" Mode="In" Type="DateTime" />
+            <Parameter Name="newhora" Mode="In" Type="Time" />
+            <Parameter Name="newtotal" Mode="In" Type="Int32" />
+            <Parameter Name="newtipo" Mode="In" Type="String" />
+            <Parameter Name="newcaja" Mode="In" Type="Int32" />
+            <Parameter Name="newempleado" Mode="In" Type="Int32" />
+            <Parameter Name="newcliente" Mode="In" Type="Int32" />
+            <Parameter Name="newmedicamento" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarMedicamento">
+            <Parameter Name="newnombre" Mode="In" Type="String" />
+            <Parameter Name="newprecio" Mode="In" Type="Int32" />
+            <Parameter Name="newprescripcion" Mode="In" Type="Boolean" />
+            <Parameter Name="newproveedor" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarMedicamentoxsucursal">
+            <Parameter Name="newsucursal" Mode="In" Type="String" />
+            <Parameter Name="newmedicamento" Mode="In" Type="String" />
+            <Parameter Name="newcantidad" Mode="In" Type="Int32" />
+            <Parameter Name="newstockminimo" Mode="In" Type="Int32" />
+            <Parameter Name="newstockpromedio" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarPedido">
+            <Parameter Name="newnumero" Mode="In" Type="Int32" />
+            <Parameter Name="newsucursal" Mode="In" Type="String" />
+            <Parameter Name="newcliente" Mode="In" Type="Int32" />
+            <Parameter Name="newmedicamento" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarProveedor">
+            <Parameter Name="newnombre" Mode="In" Type="String" />
+            <Parameter Name="newsede" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarSucursal">
+            <Parameter Name="newnombre" Mode="In" Type="String" />
+            <Parameter Name="newprovincia" Mode="In" Type="String" />
+            <Parameter Name="newciudad" Mode="In" Type="String" />
+            <Parameter Name="newsenas" Mode="In" Type="String" />
+            <Parameter Name="newdescripcion" Mode="In" Type="String" />
+            <Parameter Name="newcompania" Mode="In" Type="String" />
+            <Parameter Name="newadministrador" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ActualizarCliente">
+            <Parameter Name="newcedula" Mode="In" Type="Int32" />
+            <Parameter Name="newnombre1" Mode="In" Type="String" />
+            <Parameter Name="newnombre2" Mode="In" Type="String" />
+            <Parameter Name="newapellido1" Mode="In" Type="String" />
+            <Parameter Name="newapellido2" Mode="In" Type="String" />
+            <Parameter Name="newprovincia" Mode="In" Type="String" />
+            <Parameter Name="newciudad" Mode="In" Type="String" />
+            <Parameter Name="newsenas" Mode="In" Type="String" />
+            <Parameter Name="newfechanacimiento" Mode="In" Type="DateTime" />
+            <Parameter Name="newprioridad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ActualizarEmpleado">
+            <Parameter Name="newcedula" Mode="In" Type="Int32" />
+            <Parameter Name="newnombre1" Mode="In" Type="String" />
+            <Parameter Name="newnombre2" Mode="In" Type="String" />
+            <Parameter Name="newapellido1" Mode="In" Type="String" />
+            <Parameter Name="newapellido2" Mode="In" Type="String" />
+            <Parameter Name="newprovincia" Mode="In" Type="String" />
+            <Parameter Name="newciudad" Mode="In" Type="String" />
+            <Parameter Name="newsenas" Mode="In" Type="String" />
+            <Parameter Name="newfechanacimiento" Mode="In" Type="DateTime" />
+            <Parameter Name="newsucursal" Mode="In" Type="String" />
+            <Parameter Name="newrol" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ActualizarMedicamento">
+            <Parameter Name="newnombre" Mode="In" Type="String" />
+            <Parameter Name="newprecio" Mode="In" Type="Int32" />
+            <Parameter Name="newprescripcion" Mode="In" Type="Boolean" />
+            <Parameter Name="newproveedor" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ActualizarMedicamentoxsucursal">
+            <Parameter Name="newsucursal" Mode="In" Type="String" />
+            <Parameter Name="newmedicamento" Mode="In" Type="String" />
+            <Parameter Name="newcantidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ActualizarProveedor">
+            <Parameter Name="newnombre" Mode="In" Type="String" />
+            <Parameter Name="newsede" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ActualizarSucursal">
+            <Parameter Name="newnombre" Mode="In" Type="String" />
+            <Parameter Name="newprovincia" Mode="In" Type="String" />
+            <Parameter Name="newciudad" Mode="In" Type="String" />
+            <Parameter Name="newsenas" Mode="In" Type="String" />
+            <Parameter Name="newdescripcion" Mode="In" Type="String" />
+            <Parameter Name="newcompania" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="administradorxsucursal" EntityType="gasStationBDModel.administradorxsucursal" />
+          <EntitySet Name="caja" EntityType="gasStationBDModel.caja" />
+          <EntitySet Name="cliente" EntityType="gasStationBDModel.cliente" />
+          <EntitySet Name="compania" EntityType="gasStationBDModel.compania" />
+          <EntitySet Name="empleado" EntityType="gasStationBDModel.empleado" />
+          <EntitySet Name="empleadoxcaja" EntityType="gasStationBDModel.empleadoxcaja" />
+          <EntitySet Name="factura" EntityType="gasStationBDModel.factura" />
+          <EntitySet Name="medicamento" EntityType="gasStationBDModel.medicamento" />
+          <EntitySet Name="medicamentoxfactura" EntityType="gasStationBDModel.medicamentoxfactura" />
+          <EntitySet Name="medicamentoxpedido" EntityType="gasStationBDModel.medicamentoxpedido" />
+          <EntitySet Name="medicamentoxsucursal" EntityType="gasStationBDModel.medicamentoxsucursal" />
+          <EntitySet Name="padecimiento" EntityType="gasStationBDModel.padecimiento" />
+          <EntitySet Name="pedido" EntityType="gasStationBDModel.pedido" />
+          <EntitySet Name="proveedor" EntityType="gasStationBDModel.proveedor" />
+          <EntitySet Name="rol" EntityType="gasStationBDModel.rol" />
+          <EntitySet Name="sucursal" EntityType="gasStationBDModel.sucursal" />
+          <EntitySet Name="telefonoxcliente" EntityType="gasStationBDModel.telefonoxcliente" />
+          <AssociationSet Name="fk_admin_sucur" Association="gasStationBDModel.fk_admin_sucur">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="administradorxsucursal" EntitySet="administradorxsucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sucur_admin" Association="gasStationBDModel.fk_sucur_admin">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="administradorxsucursal" EntitySet="administradorxsucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_caja_emp" Association="gasStationBDModel.fk_caja_emp">
+            <End Role="caja" EntitySet="caja" />
+            <End Role="empleadoxcaja" EntitySet="empleadoxcaja" />
+          </AssociationSet>
+          <AssociationSet Name="fk_caja_fac" Association="gasStationBDModel.fk_caja_fac">
+            <End Role="caja" EntitySet="caja" />
+            <End Role="factura" EntitySet="factura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sucur_caja" Association="gasStationBDModel.fk_sucur_caja">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="caja" EntitySet="caja" />
+          </AssociationSet>
+          <AssociationSet Name="fk_cli_fac" Association="gasStationBDModel.fk_cli_fac">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="factura" EntitySet="factura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_cliente_ped" Association="gasStationBDModel.fk_cliente_ped">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="padecimiento" EntitySet="padecimiento" />
+          </AssociationSet>
+          <AssociationSet Name="fk_cliente_tel" Association="gasStationBDModel.fk_cliente_tel">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="telefonoxcliente" EntitySet="telefonoxcliente" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ped_cli" Association="gasStationBDModel.fk_ped_cli">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="pedido" EntitySet="pedido" />
+          </AssociationSet>
+          <AssociationSet Name="fk_comp_sucur" Association="gasStationBDModel.fk_comp_sucur">
+            <End Role="compania" EntitySet="compania" />
+            <End Role="sucursal" EntitySet="sucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_emp_caja" Association="gasStationBDModel.fk_emp_caja">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="empleadoxcaja" EntitySet="empleadoxcaja" />
+          </AssociationSet>
+          <AssociationSet Name="fk_emp_fac" Association="gasStationBDModel.fk_emp_fac">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="factura" EntitySet="factura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_rol_emp" Association="gasStationBDModel.fk_rol_emp">
+            <End Role="rol" EntitySet="rol" />
+            <End Role="empleado" EntitySet="empleado" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sucur_emp" Association="gasStationBDModel.fk_sucur_emp">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="empleado" EntitySet="empleado" />
+          </AssociationSet>
+          <AssociationSet Name="fk_fact_medica" Association="gasStationBDModel.fk_fact_medica">
+            <End Role="factura" EntitySet="factura" />
+            <End Role="medicamentoxfactura" EntitySet="medicamentoxfactura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_medica_fact" Association="gasStationBDModel.fk_medica_fact">
+            <End Role="medicamento" EntitySet="medicamento" />
+            <End Role="medicamentoxfactura" EntitySet="medicamentoxfactura" />
+          </AssociationSet>
+          <AssociationSet Name="fk_medica_sucur" Association="gasStationBDModel.fk_medica_sucur">
+            <End Role="medicamento" EntitySet="medicamento" />
+            <End Role="medicamentoxsucursal" EntitySet="medicamentoxsucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_medicamento_ped2" Association="gasStationBDModel.fk_medicamento_ped2">
+            <End Role="medicamento" EntitySet="medicamento" />
+            <End Role="medicamentoxpedido" EntitySet="medicamentoxpedido" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proveedor_medi" Association="gasStationBDModel.fk_proveedor_medi">
+            <End Role="proveedor" EntitySet="proveedor" />
+            <End Role="medicamento" EntitySet="medicamento" />
+          </AssociationSet>
+          <AssociationSet Name="fk_medicamento_ped" Association="gasStationBDModel.fk_medicamento_ped">
+            <End Role="pedido" EntitySet="pedido" />
+            <End Role="medicamentoxpedido" EntitySet="medicamentoxpedido" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sucur_medica" Association="gasStationBDModel.fk_sucur_medica">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="medicamentoxsucursal" EntitySet="medicamentoxsucursal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ped_suc" Association="gasStationBDModel.fk_ped_suc">
+            <End Role="sucursal" EntitySet="sucursal" />
+            <End Role="pedido" EntitySet="pedido" />
+          </AssociationSet>
+          <FunctionImport Name="Cerrarcaja">
+            <Parameter Name="newempleado" Mode="In" Type="Int32" />
+            <Parameter Name="newcaja" Mode="In" Type="Int32" />
+            <Parameter Name="newfechainicio" Mode="In" Type="DateTime" />
+            <Parameter Name="newhorainicio" Mode="In" Type="Time" />
+            <Parameter Name="newfechafinal" Mode="In" Type="DateTime" />
+            <Parameter Name="newhorafinal" Mode="In" Type="Time" />
+            <Parameter Name="newefectivoinicial" Mode="In" Type="Int32" />
+            <Parameter Name="newefectivofinal" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="administradorxsucursal">
+          <Key>
+            <PropertyRef Name="administrador" />
+            <PropertyRef Name="sucursal" />
+          </Key>
+          <Property Name="administrador" Type="Int32" Nullable="false" />
+          <Property Name="sucursal" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="empleado" Relationship="gasStationBDModel.fk_admin_sucur" FromRole="administradorxsucursal" ToRole="empleado" />
+          <NavigationProperty Name="sucursal1" Relationship="gasStationBDModel.fk_sucur_admin" FromRole="administradorxsucursal" ToRole="sucursal" />
+        </EntityType>
+        <EntityType Name="caja">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <Property Name="sucursal" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="empleadoxcaja" Relationship="gasStationBDModel.fk_caja_emp" FromRole="caja" ToRole="empleadoxcaja" />
+          <NavigationProperty Name="factura" Relationship="gasStationBDModel.fk_caja_fac" FromRole="caja" ToRole="factura" />
+          <NavigationProperty Name="sucursal1" Relationship="gasStationBDModel.fk_sucur_caja" FromRole="caja" ToRole="sucursal" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="cedula" />
+          </Key>
+          <Property Name="cedula" Type="Int32" Nullable="false" />
+          <Property Name="nombre1" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="nombre2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="apellido1" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="apellido2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="provincia" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ciudad" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="senas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fechanacimiento" Type="DateTime" Nullable="false" />
+          <Property Name="contrasena" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="prioridad" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="factura" Relationship="gasStationBDModel.fk_cli_fac" FromRole="cliente" ToRole="factura" />
+          <NavigationProperty Name="padecimiento" Relationship="gasStationBDModel.fk_cliente_ped" FromRole="cliente" ToRole="padecimiento" />
+          <NavigationProperty Name="telefonoxcliente" Relationship="gasStationBDModel.fk_cliente_tel" FromRole="cliente" ToRole="telefonoxcliente" />
+          <NavigationProperty Name="pedido" Relationship="gasStationBDModel.fk_ped_cli" FromRole="cliente" ToRole="pedido" />
+        </EntityType>
+        <EntityType Name="compania">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sede" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="sucursal" Relationship="gasStationBDModel.fk_comp_sucur" FromRole="compania" ToRole="sucursal" />
+        </EntityType>
+        <EntityType Name="empleado">
+          <Key>
+            <PropertyRef Name="cedula" />
+          </Key>
+          <Property Name="cedula" Type="Int32" Nullable="false" />
+          <Property Name="nombre1" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="nombre2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="apellido1" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="apellido2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="provincia" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ciudad" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="senas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fechanacimiento" Type="DateTime" Nullable="false" />
+          <Property Name="contrasena" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <Property Name="sucursal" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rol" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="administradorxsucursal" Relationship="gasStationBDModel.fk_admin_sucur" FromRole="empleado" ToRole="administradorxsucursal" />
+          <NavigationProperty Name="empleadoxcaja" Relationship="gasStationBDModel.fk_emp_caja" FromRole="empleado" ToRole="empleadoxcaja" />
+          <NavigationProperty Name="factura" Relationship="gasStationBDModel.fk_emp_fac" FromRole="empleado" ToRole="factura" />
+          <NavigationProperty Name="rol1" Relationship="gasStationBDModel.fk_rol_emp" FromRole="empleado" ToRole="rol" />
+          <NavigationProperty Name="sucursal1" Relationship="gasStationBDModel.fk_sucur_emp" FromRole="empleado" ToRole="sucursal" />
+        </EntityType>
+        <EntityType Name="empleadoxcaja">
+          <Key>
+            <PropertyRef Name="empleado" />
+            <PropertyRef Name="caja" />
+            <PropertyRef Name="fechainicio" />
+            <PropertyRef Name="fechafinal" />
+            <PropertyRef Name="horainicio" />
+            <PropertyRef Name="horafinal" />
+          </Key>
+          <Property Name="empleado" Type="Int32" Nullable="false" />
+          <Property Name="caja" Type="Int32" Nullable="false" />
+          <Property Name="fechainicio" Type="DateTime" Nullable="false" />
+          <Property Name="fechafinal" Type="DateTime" Nullable="false" />
+          <Property Name="horainicio" Type="Time" Nullable="false" />
+          <Property Name="horafinal" Type="Time" Nullable="false" />
+          <Property Name="efectivoinicial" Type="Int32" Nullable="false" />
+          <Property Name="efectivofinal" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="caja1" Relationship="gasStationBDModel.fk_caja_emp" FromRole="empleadoxcaja" ToRole="caja" />
+          <NavigationProperty Name="empleado1" Relationship="gasStationBDModel.fk_emp_caja" FromRole="empleadoxcaja" ToRole="empleado" />
+        </EntityType>
+        <EntityType Name="factura">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" />
+          <Property Name="hora" Type="Time" Nullable="false" />
+          <Property Name="total" Type="Int32" Nullable="false" />
+          <Property Name="tipo" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <Property Name="caja" Type="Int32" Nullable="false" />
+          <Property Name="empleado" Type="Int32" Nullable="false" />
+          <Property Name="cliente" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="caja1" Relationship="gasStationBDModel.fk_caja_fac" FromRole="factura" ToRole="caja" />
+          <NavigationProperty Name="cliente1" Relationship="gasStationBDModel.fk_cli_fac" FromRole="factura" ToRole="cliente" />
+          <NavigationProperty Name="empleado1" Relationship="gasStationBDModel.fk_emp_fac" FromRole="factura" ToRole="empleado" />
+          <NavigationProperty Name="medicamentoxfactura" Relationship="gasStationBDModel.fk_fact_medica" FromRole="factura" ToRole="medicamentoxfactura" />
+        </EntityType>
+        <EntityType Name="medicamento">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="precio" Type="Int32" Nullable="false" />
+          <Property Name="prescripcion" Type="Boolean" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <Property Name="proveedor" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="medicamentoxfactura" Relationship="gasStationBDModel.fk_medica_fact" FromRole="medicamento" ToRole="medicamentoxfactura" />
+          <NavigationProperty Name="medicamentoxsucursal" Relationship="gasStationBDModel.fk_medica_sucur" FromRole="medicamento" ToRole="medicamentoxsucursal" />
+          <NavigationProperty Name="medicamentoxpedido" Relationship="gasStationBDModel.fk_medicamento_ped2" FromRole="medicamento" ToRole="medicamentoxpedido" />
+          <NavigationProperty Name="proveedor1" Relationship="gasStationBDModel.fk_proveedor_medi" FromRole="medicamento" ToRole="proveedor" />
+        </EntityType>
+        <EntityType Name="medicamentoxfactura">
+          <Key>
+            <PropertyRef Name="medicamento" />
+            <PropertyRef Name="factura" />
+          </Key>
+          <Property Name="medicamento" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="factura" Type="Int32" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="factura1" Relationship="gasStationBDModel.fk_fact_medica" FromRole="medicamentoxfactura" ToRole="factura" />
+          <NavigationProperty Name="medicamento1" Relationship="gasStationBDModel.fk_medica_fact" FromRole="medicamentoxfactura" ToRole="medicamento" />
+        </EntityType>
+        <EntityType Name="medicamentoxpedido">
+          <Key>
+            <PropertyRef Name="pedido" />
+            <PropertyRef Name="medicamento" />
+          </Key>
+          <Property Name="pedido" Type="Int32" Nullable="false" />
+          <Property Name="medicamento" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="medicamento1" Relationship="gasStationBDModel.fk_medicamento_ped2" FromRole="medicamentoxpedido" ToRole="medicamento" />
+          <NavigationProperty Name="pedido1" Relationship="gasStationBDModel.fk_medicamento_ped" FromRole="medicamentoxpedido" ToRole="pedido" />
+        </EntityType>
+        <EntityType Name="medicamentoxsucursal">
+          <Key>
+            <PropertyRef Name="medicamento" />
+            <PropertyRef Name="sucursal" />
+          </Key>
+          <Property Name="medicamento" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sucursal" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="stockminimo" Type="Int32" Nullable="false" />
+          <Property Name="stockpromedio" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="medicamento1" Relationship="gasStationBDModel.fk_medica_sucur" FromRole="medicamentoxsucursal" ToRole="medicamento" />
+          <NavigationProperty Name="sucursal1" Relationship="gasStationBDModel.fk_sucur_medica" FromRole="medicamentoxsucursal" ToRole="sucursal" />
+        </EntityType>
+        <EntityType Name="padecimiento">
+          <Key>
+            <PropertyRef Name="cliente" />
+            <PropertyRef Name="padecimiento1" />
+            <PropertyRef Name="ano" />
+          </Key>
+          <Property Name="cliente" Type="Int32" Nullable="false" />
+          <Property Name="padecimiento1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ano" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="cliente1" Relationship="gasStationBDModel.fk_cliente_ped" FromRole="padecimiento" ToRole="cliente" />
+        </EntityType>
+        <EntityType Name="pedido">
+          <Key>
+            <PropertyRef Name="numero" />
+          </Key>
+          <Property Name="numero" Type="Int32" Nullable="false" />
+          <Property Name="sucursal" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cliente" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="cliente1" Relationship="gasStationBDModel.fk_ped_cli" FromRole="pedido" ToRole="cliente" />
+          <NavigationProperty Name="medicamentoxpedido" Relationship="gasStationBDModel.fk_medicamento_ped" FromRole="pedido" ToRole="medicamentoxpedido" />
+          <NavigationProperty Name="sucursal1" Relationship="gasStationBDModel.fk_ped_suc" FromRole="pedido" ToRole="sucursal" />
+        </EntityType>
+        <EntityType Name="proveedor">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sede" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="medicamento" Relationship="gasStationBDModel.fk_proveedor_medi" FromRole="proveedor" ToRole="medicamento" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="empleado" Relationship="gasStationBDModel.fk_rol_emp" FromRole="rol" ToRole="empleado" />
+        </EntityType>
+        <EntityType Name="sucursal">
+          <Key>
+            <PropertyRef Name="nombre" />
+          </Key>
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="provincia" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ciudad" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="senas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <Property Name="compania" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="administradorxsucursal" Relationship="gasStationBDModel.fk_sucur_admin" FromRole="sucursal" ToRole="administradorxsucursal" />
+          <NavigationProperty Name="caja" Relationship="gasStationBDModel.fk_sucur_caja" FromRole="sucursal" ToRole="caja" />
+          <NavigationProperty Name="compania1" Relationship="gasStationBDModel.fk_comp_sucur" FromRole="sucursal" ToRole="compania" />
+          <NavigationProperty Name="empleado" Relationship="gasStationBDModel.fk_sucur_emp" FromRole="sucursal" ToRole="empleado" />
+          <NavigationProperty Name="medicamentoxsucursal" Relationship="gasStationBDModel.fk_sucur_medica" FromRole="sucursal" ToRole="medicamentoxsucursal" />
+          <NavigationProperty Name="pedido" Relationship="gasStationBDModel.fk_ped_suc" FromRole="sucursal" ToRole="pedido" />
+        </EntityType>
+        <EntityType Name="telefonoxcliente">
+          <Key>
+            <PropertyRef Name="cliente" />
+            <PropertyRef Name="telefono" />
+          </Key>
+          <Property Name="cliente" Type="Int32" Nullable="false" />
+          <Property Name="telefono" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="cliente1" Relationship="gasStationBDModel.fk_cliente_tel" FromRole="telefonoxcliente" ToRole="cliente" />
+        </EntityType>
+        <Association Name="fk_admin_sucur">
+          <End Type="gasStationBDModel.empleado" Role="empleado" Multiplicity="1" />
+          <End Type="gasStationBDModel.administradorxsucursal" Role="administradorxsucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="administradorxsucursal">
+              <PropertyRef Name="administrador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sucur_admin">
+          <End Type="gasStationBDModel.sucursal" Role="sucursal" Multiplicity="1" />
+          <End Type="gasStationBDModel.administradorxsucursal" Role="administradorxsucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="administradorxsucursal">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_caja_emp">
+          <End Type="gasStationBDModel.caja" Role="caja" Multiplicity="1" />
+          <End Type="gasStationBDModel.empleadoxcaja" Role="empleadoxcaja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caja">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="empleadoxcaja">
+              <PropertyRef Name="caja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_caja_fac">
+          <End Type="gasStationBDModel.caja" Role="caja" Multiplicity="1" />
+          <End Type="gasStationBDModel.factura" Role="factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caja">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="factura">
+              <PropertyRef Name="caja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sucur_caja">
+          <End Type="gasStationBDModel.sucursal" Role="sucursal" Multiplicity="1" />
+          <End Type="gasStationBDModel.caja" Role="caja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="caja">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_cli_fac">
+          <End Type="gasStationBDModel.cliente" Role="cliente" Multiplicity="1" />
+          <End Type="gasStationBDModel.factura" Role="factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="factura">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_cliente_ped">
+          <End Type="gasStationBDModel.cliente" Role="cliente" Multiplicity="1" />
+          <End Type="gasStationBDModel.padecimiento" Role="padecimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="padecimiento">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_cliente_tel">
+          <End Type="gasStationBDModel.cliente" Role="cliente" Multiplicity="1" />
+          <End Type="gasStationBDModel.telefonoxcliente" Role="telefonoxcliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="telefonoxcliente">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ped_cli">
+          <End Type="gasStationBDModel.cliente" Role="cliente" Multiplicity="1" />
+          <End Type="gasStationBDModel.pedido" Role="pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="pedido">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_comp_sucur">
+          <End Type="gasStationBDModel.compania" Role="compania" Multiplicity="1" />
+          <End Type="gasStationBDModel.sucursal" Role="sucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="compania">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="sucursal">
+              <PropertyRef Name="compania" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_emp_caja">
+          <End Type="gasStationBDModel.empleado" Role="empleado" Multiplicity="1" />
+          <End Type="gasStationBDModel.empleadoxcaja" Role="empleadoxcaja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="empleadoxcaja">
+              <PropertyRef Name="empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_emp_fac">
+          <End Type="gasStationBDModel.empleado" Role="empleado" Multiplicity="1" />
+          <End Type="gasStationBDModel.factura" Role="factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="cedula" />
+            </Principal>
+            <Dependent Role="factura">
+              <PropertyRef Name="empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_rol_emp">
+          <End Type="gasStationBDModel.rol" Role="rol" Multiplicity="1" />
+          <End Type="gasStationBDModel.empleado" Role="empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rol">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="empleado">
+              <PropertyRef Name="rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sucur_emp">
+          <End Type="gasStationBDModel.sucursal" Role="sucursal" Multiplicity="1" />
+          <End Type="gasStationBDModel.empleado" Role="empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="empleado">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_fact_medica">
+          <End Type="gasStationBDModel.factura" Role="factura" Multiplicity="1" />
+          <End Type="gasStationBDModel.medicamentoxfactura" Role="medicamentoxfactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="factura">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="medicamentoxfactura">
+              <PropertyRef Name="factura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_medica_fact">
+          <End Type="gasStationBDModel.medicamento" Role="medicamento" Multiplicity="1" />
+          <End Type="gasStationBDModel.medicamentoxfactura" Role="medicamentoxfactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicamento">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamentoxfactura">
+              <PropertyRef Name="medicamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_medica_sucur">
+          <End Type="gasStationBDModel.medicamento" Role="medicamento" Multiplicity="1" />
+          <End Type="gasStationBDModel.medicamentoxsucursal" Role="medicamentoxsucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicamento">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamentoxsucursal">
+              <PropertyRef Name="medicamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_medicamento_ped2">
+          <End Type="gasStationBDModel.medicamento" Role="medicamento" Multiplicity="1" />
+          <End Type="gasStationBDModel.medicamentoxpedido" Role="medicamentoxpedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicamento">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamentoxpedido">
+              <PropertyRef Name="medicamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proveedor_medi">
+          <End Type="gasStationBDModel.proveedor" Role="proveedor" Multiplicity="1" />
+          <End Type="gasStationBDModel.medicamento" Role="medicamento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="proveedor">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamento">
+              <PropertyRef Name="proveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_medicamento_ped">
+          <End Type="gasStationBDModel.pedido" Role="pedido" Multiplicity="1" />
+          <End Type="gasStationBDModel.medicamentoxpedido" Role="medicamentoxpedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pedido">
+              <PropertyRef Name="numero" />
+            </Principal>
+            <Dependent Role="medicamentoxpedido">
+              <PropertyRef Name="pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sucur_medica">
+          <End Type="gasStationBDModel.sucursal" Role="sucursal" Multiplicity="1" />
+          <End Type="gasStationBDModel.medicamentoxsucursal" Role="medicamentoxsucursal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="medicamentoxsucursal">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ped_suc">
+          <End Type="gasStationBDModel.sucursal" Role="sucursal" Multiplicity="1" />
+          <End Type="gasStationBDModel.pedido" Role="pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sucursal">
+              <PropertyRef Name="nombre" />
+            </Principal>
+            <Dependent Role="pedido">
+              <PropertyRef Name="sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="gasStationBDModelStoreContainer" CdmEntityContainer="gasStationBDEntities">
+          <FunctionImportMapping FunctionImportName="BorrarCliente" FunctionName="gasStationBDModel.Store.delete_cliente" />
+          <FunctionImportMapping FunctionImportName="BorrarEmpleado" FunctionName="gasStationBDModel.Store.delete_empleado" />
+          <FunctionImportMapping FunctionImportName="BorrarMedicamento" FunctionName="gasStationBDModel.Store.delete_medicamento" />
+          <FunctionImportMapping FunctionImportName="BorrarPedido" FunctionName="gasStationBDModel.Store.delete_pedido" />
+          <FunctionImportMapping FunctionImportName="BorrarProveedor" FunctionName="gasStationBDModel.Store.delete_proveedor" />
+          <FunctionImportMapping FunctionImportName="BorrarSucursal" FunctionName="gasStationBDModel.Store.delete_sucursal" />
+          <FunctionImportMapping FunctionImportName="InsertarCliente" FunctionName="gasStationBDModel.Store.insert_cliente" />
+          <FunctionImportMapping FunctionImportName="InsertarEmpleado" FunctionName="gasStationBDModel.Store.insert_empleado" />
+          <FunctionImportMapping FunctionImportName="InsertarFactura" FunctionName="gasStationBDModel.Store.insert_factura" />
+          <FunctionImportMapping FunctionImportName="InsertarMedicamento" FunctionName="gasStationBDModel.Store.insert_medicamento" />
+          <FunctionImportMapping FunctionImportName="InsertarMedicamentoxsucursal" FunctionName="gasStationBDModel.Store.insert_medicamentoxsucursal" />
+          <FunctionImportMapping FunctionImportName="InsertarPedido" FunctionName="gasStationBDModel.Store.insert_pedido" />
+          <FunctionImportMapping FunctionImportName="InsertarProveedor" FunctionName="gasStationBDModel.Store.insert_proveedor" />
+          <FunctionImportMapping FunctionImportName="InsertarSucursal" FunctionName="gasStationBDModel.Store.insert_sucursal" />
+          <FunctionImportMapping FunctionImportName="ActualizarCliente" FunctionName="gasStationBDModel.Store.update_cliente" />
+          <FunctionImportMapping FunctionImportName="ActualizarEmpleado" FunctionName="gasStationBDModel.Store.update_empleado" />
+          <FunctionImportMapping FunctionImportName="ActualizarMedicamento" FunctionName="gasStationBDModel.Store.update_medicamento" />
+          <FunctionImportMapping FunctionImportName="ActualizarMedicamentoxsucursal" FunctionName="gasStationBDModel.Store.update_medicamentoxsucursal" />
+          <FunctionImportMapping FunctionImportName="ActualizarProveedor" FunctionName="gasStationBDModel.Store.update_proveedor" />
+          <FunctionImportMapping FunctionImportName="ActualizarSucursal" FunctionName="gasStationBDModel.Store.update_sucursal" />
+          <EntitySetMapping Name="administradorxsucursal">
+            <EntityTypeMapping TypeName="gasStationBDModel.administradorxsucursal">
+              <MappingFragment StoreEntitySet="administradorxsucursal">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+                <ScalarProperty Name="administrador" ColumnName="administrador" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="caja">
+            <EntityTypeMapping TypeName="gasStationBDModel.caja">
+              <MappingFragment StoreEntitySet="caja">
+                <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cliente">
+            <EntityTypeMapping TypeName="gasStationBDModel.cliente">
+              <MappingFragment StoreEntitySet="cliente">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="prioridad" ColumnName="prioridad" />
+                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+                <ScalarProperty Name="fechanacimiento" ColumnName="fechanacimiento" />
+                <ScalarProperty Name="senas" ColumnName="senas" />
+                <ScalarProperty Name="ciudad" ColumnName="ciudad" />
+                <ScalarProperty Name="provincia" ColumnName="provincia" />
+                <ScalarProperty Name="apellido2" ColumnName="apellido2" />
+                <ScalarProperty Name="apellido1" ColumnName="apellido1" />
+                <ScalarProperty Name="nombre2" ColumnName="nombre2" />
+                <ScalarProperty Name="nombre1" ColumnName="nombre1" />
+                <ScalarProperty Name="cedula" ColumnName="cedula" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="compania">
+            <EntityTypeMapping TypeName="gasStationBDModel.compania">
+              <MappingFragment StoreEntitySet="compania">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="sede" ColumnName="sede" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empleado">
+            <EntityTypeMapping TypeName="gasStationBDModel.empleado">
+              <MappingFragment StoreEntitySet="empleado">
+                <ScalarProperty Name="rol" ColumnName="rol" />
+                <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+                <ScalarProperty Name="fechanacimiento" ColumnName="fechanacimiento" />
+                <ScalarProperty Name="senas" ColumnName="senas" />
+                <ScalarProperty Name="ciudad" ColumnName="ciudad" />
+                <ScalarProperty Name="provincia" ColumnName="provincia" />
+                <ScalarProperty Name="apellido2" ColumnName="apellido2" />
+                <ScalarProperty Name="apellido1" ColumnName="apellido1" />
+                <ScalarProperty Name="nombre2" ColumnName="nombre2" />
+                <ScalarProperty Name="nombre1" ColumnName="nombre1" />
+                <ScalarProperty Name="cedula" ColumnName="cedula" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empleadoxcaja">
+            <EntityTypeMapping TypeName="gasStationBDModel.empleadoxcaja">
+              <MappingFragment StoreEntitySet="empleadoxcaja">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="efectivofinal" ColumnName="efectivofinal" />
+                <ScalarProperty Name="efectivoinicial" ColumnName="efectivoinicial" />
+                <ScalarProperty Name="horafinal" ColumnName="horafinal" />
+                <ScalarProperty Name="horainicio" ColumnName="horainicio" />
+                <ScalarProperty Name="fechafinal" ColumnName="fechafinal" />
+                <ScalarProperty Name="fechainicio" ColumnName="fechainicio" />
+                <ScalarProperty Name="caja" ColumnName="caja" />
+                <ScalarProperty Name="empleado" ColumnName="empleado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="factura">
+            <EntityTypeMapping TypeName="gasStationBDModel.factura">
+              <MappingFragment StoreEntitySet="factura">
+                <ScalarProperty Name="cliente" ColumnName="cliente" />
+                <ScalarProperty Name="empleado" ColumnName="empleado" />
+                <ScalarProperty Name="caja" ColumnName="caja" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="hora" ColumnName="hora" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="medicamento">
+            <EntityTypeMapping TypeName="gasStationBDModel.medicamento">
+              <MappingFragment StoreEntitySet="medicamento">
+                <ScalarProperty Name="proveedor" ColumnName="proveedor" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="prescripcion" ColumnName="prescripcion" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="medicamentoxfactura">
+            <EntityTypeMapping TypeName="gasStationBDModel.medicamentoxfactura">
+              <MappingFragment StoreEntitySet="medicamentoxfactura">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="factura" ColumnName="factura" />
+                <ScalarProperty Name="medicamento" ColumnName="medicamento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="medicamentoxpedido">
+            <EntityTypeMapping TypeName="gasStationBDModel.medicamentoxpedido">
+              <MappingFragment StoreEntitySet="medicamentoxpedido">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="medicamento" ColumnName="medicamento" />
+                <ScalarProperty Name="pedido" ColumnName="pedido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="medicamentoxsucursal">
+            <EntityTypeMapping TypeName="gasStationBDModel.medicamentoxsucursal">
+              <MappingFragment StoreEntitySet="medicamentoxsucursal">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="stockpromedio" ColumnName="stockpromedio" />
+                <ScalarProperty Name="stockminimo" ColumnName="stockminimo" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+                <ScalarProperty Name="medicamento" ColumnName="medicamento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="padecimiento">
+            <EntityTypeMapping TypeName="gasStationBDModel.padecimiento">
+              <MappingFragment StoreEntitySet="padecimiento">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="ano" ColumnName="ano" />
+                <ScalarProperty Name="padecimiento1" ColumnName="padecimiento" />
+                <ScalarProperty Name="cliente" ColumnName="cliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pedido">
+            <EntityTypeMapping TypeName="gasStationBDModel.pedido">
+              <MappingFragment StoreEntitySet="pedido">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="cliente" ColumnName="cliente" />
+                <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+                <ScalarProperty Name="numero" ColumnName="numero" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="proveedor">
+            <EntityTypeMapping TypeName="gasStationBDModel.proveedor">
+              <MappingFragment StoreEntitySet="proveedor">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="sede" ColumnName="sede" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rol">
+            <EntityTypeMapping TypeName="gasStationBDModel.rol">
+              <MappingFragment StoreEntitySet="rol">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sucursal">
+            <EntityTypeMapping TypeName="gasStationBDModel.sucursal">
+              <MappingFragment StoreEntitySet="sucursal">
+                <ScalarProperty Name="compania" ColumnName="compania" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="senas" ColumnName="senas" />
+                <ScalarProperty Name="ciudad" ColumnName="ciudad" />
+                <ScalarProperty Name="provincia" ColumnName="provincia" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="telefonoxcliente">
+            <EntityTypeMapping TypeName="gasStationBDModel.telefonoxcliente">
+              <MappingFragment StoreEntitySet="telefonoxcliente">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="cliente" ColumnName="cliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Cerrarcaja" FunctionName="gasStationBDModel.Store.insert_empleadoxcaja" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -27,6 +27,7 @@ namespace AccesoBaseDatos
         public int caja { get; set; }
         public int empleado { get; set; }
         public int cliente { get; set; }
+        public string tipo { get; set; }
     
         public virtual caja caja1 { get; set; }
         public virtual cliente cliente1 { get; set; }

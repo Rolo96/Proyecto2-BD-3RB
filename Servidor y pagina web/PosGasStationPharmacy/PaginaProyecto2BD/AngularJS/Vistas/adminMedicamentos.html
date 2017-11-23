@@ -1,0 +1,316 @@
+﻿<!--Se adhieren los diseños de las css-->
+<link href="Estilos/Tablas.css" rel="stylesheet" />
+<link href="Estilos/modals.css" rel="stylesheet" />
+
+<!--Se incluye el menu lateral de la vista administrador-->
+<ng-include src="urlAdmin"></ng-include>
+<div id="page-wrapper">
+    <div id="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <!--Encabezado de la pagina-->
+                <h1> Administración de productos</h1>
+                <!--Boton para agregar mas producto a sucursal-->
+                <div class="row" style="margin-bottom:-35px; margin-top:50px">
+                    <div class="container" align="center" style="width:830px">
+                        <button type="button" class="btn btn-warning btn-lg btn-block" data-toggle="modal" data-backdrop="false" ng-click="consultarSucursales()" data-target="#modalProductoCantidadSucursal">Ingresar más cantidad de un producto a una sucursal</button>
+                    </div>
+                </div>
+                <!--Boton para registrar un producto a sucursal-->
+                <div class="row" style="margin-bottom:-35px; margin-top:50px">
+                    <div class="container" align="center" style="width:830px">
+                        <button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-backdrop="false" ng-click="consultarSucursales()" data-target="#modalProductoSucursal">Registrar nuevo producto a una sucursal</button>
+                    </div>
+                </div>
+                <!--Boton para crear productos-->
+                <div class="row" style="margin-bottom:-35px; margin-top:50px">
+                    <div class="container" align="center" style="width:830px">
+                        <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-backdrop="false" data-target="#modalCreacion">Registrar nuevo producto</button>
+                    </div>
+                </div>
+                <!--Tabla en la que se muestran todos los productos-->
+                <table>
+                    <thead>
+                        <tr><th colspan="4">Lista de medicamentos</th></tr>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Prescripcion</th>
+                            <th colspan="2">Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="medicamento in medicamentos">
+                            <td>{{medicamento.nombre}}</td>
+                            <td>{{medicamento.prescripcion}}</td>
+                            <td>¢{{medicamento.precio}}</td>
+                            <td>
+                                <i class="material-icons button edit" ng-click="editar(medicamento)" data-toggle="modal" data-target="#editarMedicamento">Detalles</i>
+                                <i class="material-icons button delete" ng-click="borrarMedicamento(medicamento.nombre)">Eliminar</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!--Modal para editar medicamentos-->
+                <div class="modal fade" id="editarMedicamento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrarEditProdu">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Actualización de producto</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="productoActualizarForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Nombre -->
+                                                    <div class="form-group">
+                                                        <label>Nombre</label>
+                                                        <p>{{medicamento.nombre}}</p>
+                                                    </div>
+
+                                                    <!-- Prescripción -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoActualizarForm.prescripcion.$invalid  && (productoActualizarForm.prescripcion.$dirty || submitted)}">
+                                                        <label>Prescripción</label>
+                                                        <select ng-model="medicamento.prescripcion" class="form-control" name="prescipcion" required>
+                                                            <option value="Sí" class="form-control">Sí</option>
+                                                            <option value="No" class="form-control">No</option>
+                                                        </select>
+                                                        <p ng-show="productoActualizarForm.prescripcion.$error.required  && (productoActualizarForm.prescripcion.$dirty || submitted)" class="help-block">Seleccione la prescripcion.</p>
+                                                    </div>
+
+                                                    <!-- Proveedor  -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoActualizarForm.proveedor.$invalid  && (productoActualizarForm.proveedor.$dirty || submitted)}">
+                                                        <label>Proveedor</label>
+                                                        <select ng-model="medicamento.proveedor" name="proveedor" class="form-control" ng-required="true">
+                                                            <option ng-repeat="proveedor in proveedores" value='{{proveedor.nombre}}'>{{proveedor.nombre}}</option>
+                                                        </select>
+                                                        <p ng-show="productoActualizarForm.proveedor.$error.required  && (productoActualizarForm.proveedor.$dirty || submitted)" class="help-block">El proveedor del producto es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Precio -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoActualizarForm.medicamento.precio.$invalid && (productoActualizarForm.medicamento.precio.$dirty || submitted)}">
+                                                        <label>Precio</label>
+                                                        <input type="number" name="medicamento.precio" class="form-control" ng-model="medicamento.precio" placeholder="Precio en colones" ng-required="true">
+                                                        <p ng-show="productoActualizarForm.medicamento.precio.$error.required && (productoActualizarForm.medicamento.precio.$dirty || submitted)" class="help-block">El precio del producto es requerido.</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="productoActualizarForm.$invalid" ng-click="editarMedicamento()">Actualizar</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--Modal para crear productos-->
+                <div class="modal fade" id="modalCreacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrarCrearProdu">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Creación de producto</h4>
+                            </div>
+                            <div class="modal-body">
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="productoForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Nombre -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.prescripcion.$invalid && (productoForm.prescripcion.$dirty || submitted)}">
+                                                        <label>Nombre</label>
+                                                        <input type="text" name="nombre" class="form-control" ng-model="nombre" placeholder="Nombre" ng-required="true">
+                                                        <p ng-show="productoForm.nombre.$error.required && (productoForm.nombre.$dirty || submitted)" class="help-block">El nombre del producto es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Prescripción -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.prescripcion.$invalid  && (productoForm.prescripcion.$dirty || submitted)}">
+                                                        <label>Prescripción</label>
+                                                        <select class="form-control" ng-model="prescripcion" required>
+                                                            <option value="Si" class="form-control">Sí</option>
+                                                            <option value="No" class="form-control">No</option>
+                                                        </select>
+                                                        <p ng-show="productoForm.prescripcion.$error.required  && (productoForm.prescripcion.$dirty || submitted)" class="help-block">Seleccione si el producto tiene prescripcion.</p>
+                                                    </div>
+
+                                                    <!-- Proveedor  -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.proveedor.$invalid  && (productoForm.proveedor.$dirty || submitted)}">
+                                                        <label>Proveedor</label>
+                                                        <select ng-model="proveedor" class="form-control" ng-required="true">
+                                                            <option ng-repeat="prov in proveedores" value='{{prov.nombre}}'>{{prov.nombre}}</option>
+                                                        </select>
+                                                        <p ng-show="productoForm.proveedor.$error.required  && (productoForm.proveedor.$dirty || submitted)" class="help-block">El proveedor del producto es requerido.</p>
+                                                    </div>
+
+                                                    <!-- Precio -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : productoForm.precio.$invalid && (productoForm.precio.$dirty || submitted)}">
+                                                        <label>Precio (en colones)</label>
+                                                        <input type="number" name="precio" class="form-control" ng-model="precio" placeholder="Precio en colones" ng-required="true">
+                                                        <p ng-show="productoForm.precio.$error.required && (productoForm.precio.$dirty || submitted)" class="help-block">El precio del producto es requerido.</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="productoForm.$invalid" ng-click="agregarMedicamento()">Registrar</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal para registrar un medicamento a una sucursal-->
+                <div class="modal fade" id="modalProductoSucursal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrarProduSucu">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Registro de medicamento en sucursal</h4>
+                            </div>
+                            <div class="modal-body">
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="medicamentoSucuForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Nombre -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoAcForm.nombreMedicaSucu.$invalid  && (empleadoAcForm.nombreMedicaSucu.$dirty || submitted)}">
+                                                        <label>Medicamento</label>
+                                                        <select name="nombreMedicaSucu" ng-model="nombreMedicaSucu" class="form-control" ng-required="true">
+                                                            <option ng-repeat="medicamento in medicamentos" value='{{medicamento.nombre}}'>{{medicamento.nombre}}</option>
+                                                        </select>
+                                                        <p ng-show="medicamentoSucuForm.nombreMedicaSucu.$error.required  && (medicamentoSucuForm.nombreMedicaSucu.$dirty || submitted)" class="help-block">El nombre es requerido.</p>
+                                                    </div>
+                                                    <!-- Sucursal -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : empleadoAcForm.sucursal.$invalid  && (empleadoAcForm.sucursal.$dirty || submitted)}">
+                                                        <label>Sucursal</label>
+                                                        <select ng-model="sucursalMedicaSucu" class="form-control" ng-required="true">
+                                                            <option ng-repeat="sucursal in sucursales" value='{{sucursal.nombre}}'>{{sucursal.nombre}}</option>
+                                                        </select>
+                                                        <p ng-show="medicamentoSucuForm.sucursalMedicaSucu.$error.required  && (medicamentoSucuForm.sucursalMedicaSucu.$dirty || submitted)" class="help-block">La sucursal es requerida.</p>
+                                                    </div>
+                                                    <!-- Cantidad actual-->
+                                                    <div class="form-group" ng-class="{ 'has-error' : medicamentoSucuForm.cantidaActualdMedicaSucu.$invalid && (medicamentoSucuForm.cantidaActualdMedicaSucu.$dirty || submitted)}">
+                                                        <label>Cantidad actual</label>
+                                                        <input type="number" name="precio" class="form-control" ng-model="cantidaActualdMedicaSucu" placeholder="Ingrese la cantidad para el stock" ng-required="true">
+                                                        <p ng-show="medicamentoSucuForm.cantidaActualdMedicaSucu.$error.required && (medicamentoSucuForm.cantidaActualdMedicaSucu.$dirty || submitted)" class="help-block">La cantidad es requerida.</p>
+                                                    </div>
+                                                    <!-- Cantidad minima -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : medicamentoSucuForm.cantidadMinMedicaSucu.$invalid && (medicamentoSucuForm.cantidadMinMedicaSucu.$dirty || submitted)}">
+                                                        <label>Cantidad mínima</label>
+                                                        <input type="number" name="cantidadMinMedicaSucu" class="form-control" ng-model="cantidadMinMedicaSucu" placeholder="Ingrese la cantidad mínima en stock" ng-required="true">
+                                                        <p ng-show="medicamentoSucuForm.cantidadMinMedicaSucu.$error.required && (medicamentoSucuForm.cantidadMinMedicaSucu.$dirty || submitted)" class="help-block">La cantidad mínima es requerida.</p>
+                                                    </div>
+                                                    <!-- Cantidad promedio -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : medicamentoSucuForm.cantidadPromMedicaSucu.$invalid && (medicamentoSucuForm.cantidadPromMedicaSucu.$dirty || submitted)}">
+                                                        <label>Cantidad promedio</label>
+                                                        <input type="number" name="cantidadPromMedicaSucu" class="form-control" ng-model="cantidadPromMedicaSucu" placeholder="Ingrese la cantidad promedio en stock" ng-required="true">
+                                                        <p ng-show="medicamentoSucuForm.cantidadPromMedicaSucu.$error.required && (medicamentoSucuForm.cantidadPromMedicaSucu.$dirty || submitted)" class="help-block">La cantidad promedio es requerida.</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="medicamentoSucuForm.$invalid" ng-click="agregarMedicamentoSucursal()">Registrar medicamento</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal para registrar mas medicamentos a una sucursal-->
+                <div class="modal fade" id="modalProductoCantidadSucursal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="botoncerrarAgregarCantidadSucu">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Aumentar cantidad de medicamento en stock</h4>
+                            </div>
+                            <div class="modal-body">
+                                <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+                                <div class="bootstrap-iso">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <form method="post" name="medicamentoCantidaSucuForm" ng-submit="submitForm()" novalidate>
+                                                    <!-- Sucursal -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : medicamentoCantidaSucuForm.sucursalAgregarSucu.$invalid  && (medicamentoCantidaSucuForm.sucursalAgregarSucu.$dirty || submitted)}">
+                                                        <label>Sucursal</label>
+                                                        <select ng-model="sucursalAgregarCantidadSucu" name="sucursalAgregarSucu" class="form-control" ng-change="consultarMedicamentosSucu()" ng-required="true">
+                                                            <option ng-repeat="sucursal in sucursales" value='{{sucursal.nombre}}'>{{sucursal.nombre}}</option>
+                                                        </select>
+                                                        <p ng-show="medicamentoCantidaSucuForm.sucursalAgregarSucu.$error.required  && (medicamentoCantidaSucuForm.sucursalAgregarSucu.$dirty || submitted)" class="help-block">La sucursal es requerida.</p>
+                                                    </div>
+                                                    <!-- Nombre -->
+                                                    <div class="form-group" ng-class="{ 'has-error' : medicamentoCantidaSucuForm.nombreAgregarSucu.$invalid  && (medicamentoCantidaSucuForm.nombreAgregarSucu.$dirty || submitted)}">
+                                                        <label>Medicamento</label>
+                                                        <select name="nombreAgregarSucu" ng-model="nombreAgregarCantidadSucu" class="form-control" ng-required="true">
+                                                            <option ng-repeat="medicamento in medicamentosSucu" value='{{medicamento.nombre}}'>{{medicamento.nombre}}</option>
+                                                        </select>
+                                                        <p ng-show="medicamentoCantidaSucuForm.nombreAgregarSucu.$error.required  && (medicamentoCantidaSucuForm.nombreAgregarSucu.$dirty || submitted)" class="help-block">El nombre es requerido.</p>
+                                                    </div>
+                                                    <!-- Cantidad Agregada-->
+                                                    <div class="form-group" ng-class="{ 'has-error' : medicamentoCantidaSucuForm.cantidadAgregarSucu.$invalid && (medicamentoCantidaSucuForm.cantidadAgregarSucu.$dirty || submitted)}">
+                                                        <label>Cantidad para agregar</label>
+                                                        <input type="number" name="cantidadAgregarSucu" class="form-control" ng-model="cantidadAgregarCantidadSucu" placeholder="Ingrese la cantidad para el stock" ng-required="true">
+                                                        <p ng-show="medicamentoCantidaSucuForm.cantidadAgregarSucu.$error.required && (medicamentoCantidaSucuForm.cantidadAgregarSucu.$dirty || submitted)" class="help-block">La cantidad es requerida.</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <button type="submit" class="btn btn-primary" ng-disabled="medicamentoCantidaSucuForm.$invalid" ng-click="agregarMedicamentoSucursalCantidad()">Agregar cantidad</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

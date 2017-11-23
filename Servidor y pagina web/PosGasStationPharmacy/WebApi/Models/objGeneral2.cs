@@ -5,6 +5,9 @@ using System.Web;
 
 namespace WebApi.Models
 {
+    /// <summary>
+    /// Modelo para recibir dos strings
+    /// </summary>
     public class objGeneral2
     {
         public string opcion { get; set; }

@@ -2,15 +2,22 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using AccesoBaseDatos;
 using System.Data;
 using WebApi.Models;
 
 namespace WebApi.Controllers
 {
+    /// <summary>
+    /// Clase que maneja las acciones sobre la sucursal
+    /// </summary>
     public class SucursalController : ApiController
     {
-        
+
+        /// <summary>
+        /// Crea una sucursal nueva
+        /// </summary>
+        /// <param name="sucursal">Informacion de la sucursal</param>
+        /// <returns>HTTP Status code OK si se agrego, Unauthorized en caso contrario</returns>
         [HttpPost]
         [Route("agregarSucursal")]
         public HttpResponseMessage AgregarSucursal(sucursalAdmin sucursal)
@@ -30,6 +37,11 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Borra una sucursal
+        /// </summary>
+        /// <param name="obj">Json que trae en opcion el nombre de la sucursal a borrar</param>
+        /// <returns>HTTP Status code OK si se borra, Unauthorized en caso contrario</returns>
         [HttpPost]
         [Route("borrarSucursal")]
         public HttpResponseMessage BorrarSucursal(objGeneral obj)
@@ -49,6 +61,11 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Actualiza la informacion de una sucursal
+        /// </summary>
+        /// <param name="sucursal">Informacion de la sucursal</param>
+        /// <returns>HTTP Status code OK si se actualiza, Unauthorized en caso contrario</returns>
         [HttpPost]
         [Route("actualizarSucursal")]
         public HttpResponseMessage ActualizarSucursal(sucursal sucursal)
@@ -68,6 +85,11 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Consulta las sucursales de una compania
+        /// </summary>
+        /// <param name="obj">Json que trae en opcion el nombre de la compania</param>
+        /// <returns>HTTP Status code OK y la informacion de la sucursal, Unauthorized en caso contrario</returns>
         [HttpPost]
         [Route("consultarSucursales")]
         public HttpResponseMessage ConsultarSucursal(objGeneral obj)

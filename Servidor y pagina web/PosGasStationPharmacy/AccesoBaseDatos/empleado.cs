@@ -17,8 +17,8 @@ namespace AccesoBaseDatos
         public empleado()
         {
             this.administradorxsucursal = new HashSet<administradorxsucursal>();
-            this.empleadoxcaja = new HashSet<empleadoxcaja>();
             this.factura = new HashSet<factura>();
+            this.empleadoxcaja = new HashSet<empleadoxcaja>();
         }
     
         public int cedula { get; set; }
@@ -36,9 +36,9 @@ namespace AccesoBaseDatos
         public string rol { get; set; }
     
         public virtual ICollection<administradorxsucursal> administradorxsucursal { get; set; }
-        public virtual ICollection<empleadoxcaja> empleadoxcaja { get; set; }
         public virtual ICollection<factura> factura { get; set; }
         public virtual rol rol1 { get; set; }
         public virtual sucursal sucursal1 { get; set; }
+        public virtual ICollection<empleadoxcaja> empleadoxcaja { get; set; }
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0da153fe9dae43049a9df9322d8cd03c" Name="Diagram1">
+        <EntityTypeShape EntityType="gasStationBDModel.administradorxsucursal" Width="1.5" PointX="5.25" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.caja" Width="1.5" PointX="5.25" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.cliente" Width="1.5" PointX="8.25" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.compania" Width="1.5" PointX="0.75" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.empleado" Width="1.5" PointX="8.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.empleadoxcaja" Width="1.5" PointX="7.5" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.factura" Width="1.5" PointX="10.5" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.medicamento" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.medicamentoxfactura" Width="1.5" PointX="12.75" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.medicamentoxpedido" Width="1.5" PointX="7.5" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.medicamentoxsucursal" Width="1.5" PointX="5.25" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.padecimiento" Width="1.5" PointX="10.5" PointY="22.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.pedido" Width="1.5" PointX="5.25" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.proveedor" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.rol" Width="1.5" PointX="6" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.sucursal" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="gasStationBDModel.telefonoxcliente" Width="1.5" PointX="10.5" PointY="25" IsExpanded="true" />
+        <AssociationConnector Association="gasStationBDModel.fk_admin_sucur" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_sucur_admin" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_caja_emp" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_caja_fac" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_sucur_caja" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_cli_fac" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_cliente_ped" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_cliente_tel" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_ped_cli" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_comp_sucur" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_emp_caja" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_emp_fac" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_rol_emp" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_sucur_emp" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_fact_medica" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_medica_fact" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_medica_sucur" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_medicamento_ped2" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_proveedor_medi" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_medicamento_ped" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_sucur_medica" ManuallyRouted="false" />
+        <AssociationConnector Association="gasStationBDModel.fk_ped_suc" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

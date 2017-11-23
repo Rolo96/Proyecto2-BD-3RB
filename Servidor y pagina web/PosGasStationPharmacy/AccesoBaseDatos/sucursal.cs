@@ -20,6 +20,7 @@ namespace AccesoBaseDatos
             this.caja = new HashSet<caja>();
             this.empleado = new HashSet<empleado>();
             this.medicamentoxsucursal = new HashSet<medicamentoxsucursal>();
+            this.pedido = new HashSet<pedido>();
         }
     
         public string nombre { get; set; }
@@ -35,5 +36,6 @@ namespace AccesoBaseDatos
         public virtual compania compania1 { get; set; }
         public virtual ICollection<empleado> empleado { get; set; }
         public virtual ICollection<medicamentoxsucursal> medicamentoxsucursal { get; set; }
+        public virtual ICollection<pedido> pedido { get; set; }
     }
 }

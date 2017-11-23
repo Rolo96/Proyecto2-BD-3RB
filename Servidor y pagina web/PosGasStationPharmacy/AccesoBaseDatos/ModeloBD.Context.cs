@@ -33,7 +33,6 @@ namespace AccesoBaseDatos
         public DbSet<cliente> cliente { get; set; }
         public DbSet<compania> compania { get; set; }
         public DbSet<empleado> empleado { get; set; }
-        public DbSet<empleadoxcaja> empleadoxcaja { get; set; }
         public DbSet<factura> factura { get; set; }
         public DbSet<medicamento> medicamento { get; set; }
         public DbSet<medicamentoxfactura> medicamentoxfactura { get; set; }
@@ -43,6 +42,9 @@ namespace AccesoBaseDatos
         public DbSet<rol> rol { get; set; }
         public DbSet<sucursal> sucursal { get; set; }
         public DbSet<telefonoxcliente> telefonoxcliente { get; set; }
+        public DbSet<medicamentoxpedido> medicamentoxpedido { get; set; }
+        public DbSet<pedido> pedido { get; set; }
+        public DbSet<empleadoxcaja> empleadoxcaja { get; set; }
     
         public virtual int BorrarCliente(Nullable<int> newcedula)
         {
@@ -421,6 +423,131 @@ namespace AccesoBaseDatos
                 new ObjectParameter("newcompania", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarSucursal", newnombreParameter, newprovinciaParameter, newciudadParameter, newsenasParameter, newdescripcionParameter, newcompaniaParameter);
+        }
+    
+        public virtual int InsertarFactura(Nullable<System.DateTime> newfecha, Nullable<System.TimeSpan> newhora, Nullable<int> newtotal, string newtipo, Nullable<int> newcaja, Nullable<int> newempleado, Nullable<int> newcliente, string newmedicamento)
+        {
+            var newfechaParameter = newfecha.HasValue ?
+                new ObjectParameter("newfecha", newfecha) :
+                new ObjectParameter("newfecha", typeof(System.DateTime));
+    
+            var newhoraParameter = newhora.HasValue ?
+                new ObjectParameter("newhora", newhora) :
+                new ObjectParameter("newhora", typeof(System.TimeSpan));
+    
+            var newtotalParameter = newtotal.HasValue ?
+                new ObjectParameter("newtotal", newtotal) :
+                new ObjectParameter("newtotal", typeof(int));
+    
+            var newtipoParameter = newtipo != null ?
+                new ObjectParameter("newtipo", newtipo) :
+                new ObjectParameter("newtipo", typeof(string));
+    
+            var newcajaParameter = newcaja.HasValue ?
+                new ObjectParameter("newcaja", newcaja) :
+                new ObjectParameter("newcaja", typeof(int));
+    
+            var newempleadoParameter = newempleado.HasValue ?
+                new ObjectParameter("newempleado", newempleado) :
+                new ObjectParameter("newempleado", typeof(int));
+    
+            var newclienteParameter = newcliente.HasValue ?
+                new ObjectParameter("newcliente", newcliente) :
+                new ObjectParameter("newcliente", typeof(int));
+    
+            var newmedicamentoParameter = newmedicamento != null ?
+                new ObjectParameter("newmedicamento", newmedicamento) :
+                new ObjectParameter("newmedicamento", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertarFactura", newfechaParameter, newhoraParameter, newtotalParameter, newtipoParameter, newcajaParameter, newempleadoParameter, newclienteParameter, newmedicamentoParameter);
+        }
+    
+        public virtual int InsertarMedicamentoxsucursal(string newsucursal, string newmedicamento, Nullable<int> newcantidad, Nullable<int> newstockminimo, Nullable<int> newstockpromedio)
+        {
+            var newsucursalParameter = newsucursal != null ?
+                new ObjectParameter("newsucursal", newsucursal) :
+                new ObjectParameter("newsucursal", typeof(string));
+    
+            var newmedicamentoParameter = newmedicamento != null ?
+                new ObjectParameter("newmedicamento", newmedicamento) :
+                new ObjectParameter("newmedicamento", typeof(string));
+    
+            var newcantidadParameter = newcantidad.HasValue ?
+                new ObjectParameter("newcantidad", newcantidad) :
+                new ObjectParameter("newcantidad", typeof(int));
+    
+            var newstockminimoParameter = newstockminimo.HasValue ?
+                new ObjectParameter("newstockminimo", newstockminimo) :
+                new ObjectParameter("newstockminimo", typeof(int));
+    
+            var newstockpromedioParameter = newstockpromedio.HasValue ?
+                new ObjectParameter("newstockpromedio", newstockpromedio) :
+                new ObjectParameter("newstockpromedio", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertarMedicamentoxsucursal", newsucursalParameter, newmedicamentoParameter, newcantidadParameter, newstockminimoParameter, newstockpromedioParameter);
+        }
+    
+        public virtual int ActualizarMedicamentoxsucursal(string newsucursal, string newmedicamento, Nullable<int> newcantidad)
+        {
+            var newsucursalParameter = newsucursal != null ?
+                new ObjectParameter("newsucursal", newsucursal) :
+                new ObjectParameter("newsucursal", typeof(string));
+    
+            var newmedicamentoParameter = newmedicamento != null ?
+                new ObjectParameter("newmedicamento", newmedicamento) :
+                new ObjectParameter("newmedicamento", typeof(string));
+    
+            var newcantidadParameter = newcantidad.HasValue ?
+                new ObjectParameter("newcantidad", newcantidad) :
+                new ObjectParameter("newcantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarMedicamentoxsucursal", newsucursalParameter, newmedicamentoParameter, newcantidadParameter);
+        }
+    
+        public virtual int BorrarPedido(Nullable<int> newnumero)
+        {
+            var newnumeroParameter = newnumero.HasValue ?
+                new ObjectParameter("newnumero", newnumero) :
+                new ObjectParameter("newnumero", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BorrarPedido", newnumeroParameter);
+        }
+    
+        public virtual int Cerrarcaja(Nullable<int> newempleado, Nullable<int> newcaja, Nullable<System.DateTime> newfechainicio, Nullable<System.TimeSpan> newhorainicio, Nullable<System.DateTime> newfechafinal, Nullable<System.TimeSpan> newhorafinal, Nullable<int> newefectivoinicial, Nullable<int> newefectivofinal)
+        {
+            var newempleadoParameter = newempleado.HasValue ?
+                new ObjectParameter("newempleado", newempleado) :
+                new ObjectParameter("newempleado", typeof(int));
+    
+            var newcajaParameter = newcaja.HasValue ?
+                new ObjectParameter("newcaja", newcaja) :
+                new ObjectParameter("newcaja", typeof(int));
+    
+            var newfechainicioParameter = newfechainicio.HasValue ?
+                new ObjectParameter("newfechainicio", newfechainicio) :
+                new ObjectParameter("newfechainicio", typeof(System.DateTime));
+    
+            var newhorainicioParameter = newhorainicio.HasValue ?
+                new ObjectParameter("newhorainicio", newhorainicio) :
+                new ObjectParameter("newhorainicio", typeof(System.TimeSpan));
+    
+            var newfechafinalParameter = newfechafinal.HasValue ?
+                new ObjectParameter("newfechafinal", newfechafinal) :
+                new ObjectParameter("newfechafinal", typeof(System.DateTime));
+    
+            var newhorafinalParameter = newhorafinal.HasValue ?
+                new ObjectParameter("newhorafinal", newhorafinal) :
+                new ObjectParameter("newhorafinal", typeof(System.TimeSpan));
+    
+            var newefectivoinicialParameter = newefectivoinicial.HasValue ?
+                new ObjectParameter("newefectivoinicial", newefectivoinicial) :
+                new ObjectParameter("newefectivoinicial", typeof(int));
+    
+            var newefectivofinalParameter = newefectivofinal.HasValue ?
+                new ObjectParameter("newefectivofinal", newefectivofinal) :
+                new ObjectParameter("newefectivofinal", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Cerrarcaja", newempleadoParameter, newcajaParameter, newfechainicioParameter, newhorainicioParameter, newfechafinalParameter, newhorafinalParameter, newefectivoinicialParameter, newefectivofinalParameter);
         }
     }
 }

@@ -16,16 +16,16 @@ namespace AccesoBaseDatos
     {
         public caja()
         {
-            this.empleadoxcaja = new HashSet<empleadoxcaja>();
             this.factura = new HashSet<factura>();
+            this.empleadoxcaja = new HashSet<empleadoxcaja>();
         }
     
         public int id { get; set; }
         public bool activo { get; set; }
         public string sucursal { get; set; }
     
-        public virtual ICollection<empleadoxcaja> empleadoxcaja { get; set; }
         public virtual ICollection<factura> factura { get; set; }
         public virtual sucursal sucursal1 { get; set; }
+        public virtual ICollection<empleadoxcaja> empleadoxcaja { get; set; }
     }
 }

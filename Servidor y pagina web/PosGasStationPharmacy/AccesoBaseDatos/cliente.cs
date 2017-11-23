@@ -19,6 +19,7 @@ namespace AccesoBaseDatos
             this.factura = new HashSet<factura>();
             this.padecimiento = new HashSet<padecimiento>();
             this.telefonoxcliente = new HashSet<telefonoxcliente>();
+            this.pedido = new HashSet<pedido>();
         }
     
         public int cedula { get; set; }
@@ -37,5 +38,6 @@ namespace AccesoBaseDatos
         public virtual ICollection<factura> factura { get; set; }
         public virtual ICollection<padecimiento> padecimiento { get; set; }
         public virtual ICollection<telefonoxcliente> telefonoxcliente { get; set; }
+        public virtual ICollection<pedido> pedido { get; set; }
     }
 }

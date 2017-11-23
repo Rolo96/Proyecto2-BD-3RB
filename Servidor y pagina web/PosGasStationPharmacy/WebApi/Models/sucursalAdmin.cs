@@ -1,5 +1,8 @@
 ﻿namespace WebApi.Models
 {
+    /// <summary>
+    /// Modelo que recibe la informacion para crear una sucursal
+    /// </summary>
     public class sucursalAdmin
     {
         public string nombre {get; set;}

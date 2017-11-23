@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="325e5114382142ffa16ca5e6e4db41f5" Name="Diagram1" ZoomLevel="18">
+        <EntityTypeShape EntityType="gasStationBDModel.administradorxsucursal" Width="1.5" PointX="10.5" PointY="11.875" />
+        <EntityTypeShape EntityType="gasStationBDModel.caja" Width="1.5" PointX="5.25" PointY="26.125" />
+        <EntityTypeShape EntityType="gasStationBDModel.cliente" Width="1.5" PointX="3" PointY="15.75" />
+        <EntityTypeShape EntityType="gasStationBDModel.compania" Width="1.5" PointX="0.75" PointY="11.875" />
+        <EntityTypeShape EntityType="gasStationBDModel.empleado" Width="1.5" PointX="8.25" PointY="10.625" />
+        <EntityTypeShape EntityType="gasStationBDModel.empleadoxcaja" Width="1.5" PointX="10.5" PointY="17.875" />
+        <EntityTypeShape EntityType="gasStationBDModel.factura" Width="1.5" PointX="13.5" PointY="17.625" />
+        <EntityTypeShape EntityType="gasStationBDModel.medicamento" Width="1.5" PointX="3" PointY="7.375" />
+        <EntityTypeShape EntityType="gasStationBDModel.medicamentoxfactura" Width="1.5" PointX="15.75" PointY="18.375" />
+        <EntityTypeShape EntityType="gasStationBDModel.medicamentoxpedido" Width="1.5" PointX="10.5" PointY="8.75" />
+        <EntityTypeShape EntityType="gasStationBDModel.medicamentoxsucursal" Width="1.5" PointX="5.25" PointY="7.5" />
+        <EntityTypeShape EntityType="gasStationBDModel.padecimiento" Width="1.5" PointX="5.25" PointY="20.125" />
+        <EntityTypeShape EntityType="gasStationBDModel.pedido" Width="1.5" PointX="5.25" PointY="11.625" />
+        <EntityTypeShape EntityType="gasStationBDModel.proveedor" Width="1.5" PointX="0.75" PointY="7.875" />
+        <EntityTypeShape EntityType="gasStationBDModel.rol" Width="1.5" PointX="6" PointY="14.875" />
+        <EntityTypeShape EntityType="gasStationBDModel.sucursal" Width="1.5" PointX="3" PointY="11" />
+        <EntityTypeShape EntityType="gasStationBDModel.telefonoxcliente" Width="1.5" PointX="5.25" PointY="17.5" />
+        <AssociationConnector Association="gasStationBDModel.fk_admin_sucur" />
+        <AssociationConnector Association="gasStationBDModel.fk_sucur_admin" />
+        <AssociationConnector Association="gasStationBDModel.fk_caja_emp" />
+        <AssociationConnector Association="gasStationBDModel.fk_caja_fac" />
+        <AssociationConnector Association="gasStationBDModel.fk_sucur_caja" />
+        <AssociationConnector Association="gasStationBDModel.fk_cli_fac" />
+        <AssociationConnector Association="gasStationBDModel.fk_cliente_ped" />
+        <AssociationConnector Association="gasStationBDModel.fk_cliente_tel" />
+        <AssociationConnector Association="gasStationBDModel.fk_ped_cli" />
+        <AssociationConnector Association="gasStationBDModel.fk_comp_sucur" />
+        <AssociationConnector Association="gasStationBDModel.fk_emp_caja" />
+        <AssociationConnector Association="gasStationBDModel.fk_emp_fac" />
+        <AssociationConnector Association="gasStationBDModel.fk_rol_emp" />
+        <AssociationConnector Association="gasStationBDModel.fk_sucur_emp" />
+        <AssociationConnector Association="gasStationBDModel.fk_fact_medica" />
+        <AssociationConnector Association="gasStationBDModel.fk_medica_fact" />
+        <AssociationConnector Association="gasStationBDModel.fk_medica_sucur" />
+        <AssociationConnector Association="gasStationBDModel.fk_medicamento_ped2" />
+        <AssociationConnector Association="gasStationBDModel.fk_proveedor_medi" />
+        <AssociationConnector Association="gasStationBDModel.fk_medicamento_ped" />
+        <AssociationConnector Association="gasStationBDModel.fk_sucur_medica" />
+        <AssociationConnector Association="gasStationBDModel.fk_ped_suc" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
